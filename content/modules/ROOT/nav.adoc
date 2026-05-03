@@ -1,8 +1,7 @@
 * xref:index.adoc[Home]
 
-* xref:01-overview.adoc[Overview and presenter preparation]
 
-* xref:02-details.adoc[Environment details and setup]
+* xref:01-details.adoc[Environment details and setup]
 
 .Section 1: Foundational application platform
 * xref:03-module-01-developer-experience.adoc[Module 1: Developer experience]
