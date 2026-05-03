@@ -1,7 +1,6 @@
 * xref:index.adoc[Home]
 
-
-* xref:01-details.adoc[Environment details and setup]
+* xref:02-details.adoc[Environment details and setup]
 
 .Section 1: Foundational application platform
 * xref:03-module-01-developer-experience.adoc[Module 1: Developer experience]
@@ -41,9 +40,12 @@
 ** xref:08-module-06-supply-chain.adoc#part-2[Part 2: Application topology and wrap-up]
 ** xref:08-module-06-supply-chain.adoc#summary[Section 2 summary]
 
+////
+Section 3 hidden — re-enable by removing the //// markers
 .Section 3: Intelligent applications
 * xref:09-module-07-ai-applications.adoc[Module 7: AI-enhanced applications]
 ** xref:09-module-07-ai-applications.adoc#part-1[Part 1: The email triage problem]
 ** xref:09-module-07-ai-applications.adoc#part-2[Part 2: Implementing LLM-powered routing]
 ** xref:09-module-07-ai-applications.adoc#part-3[Part 3: Deploying and showcasing the feature]
 ** xref:09-module-07-ai-applications.adoc#summary[Section 3 summary]
+////

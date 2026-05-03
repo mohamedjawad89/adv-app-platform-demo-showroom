@@ -2,8 +2,6 @@
 include::partial$_attributes.adoc[]
 :imagesdir: ../assets/images
 
-*Presenter note*: This module continues the Section 2 story. The developer works on their feature branch in DevSpaces, uses the Dependency Analytics plugin to identify an unnecessary dependency (quarkus-rest), pushes code that triggers the secure build pipeline against their feature branch, then creates a merge request in GitLab for PE approval. The PE approves and creates a release tag. Target duration: 15 minutes across 2 parts.
-
 [NOTE]
 ====
 One big difference here is that you should not have to visit the OpenShift Console at all - reinforcing the message that Developer Hub is the single pane of glass for developers. The deployment topology, pipeline and Argo CD sync are both viewed from Developer Hub. The only time you leave Developer Hub is to log in to GitLab as the platform engineer to approve the merge request and create a release tag.
@@ -79,17 +77,6 @@ image::devspaces-dependency-analytics-report.png[DevSpaces IDE showing Dependenc
 **Business value callout:**
 
 "At Parasol, dependency issues are only caught during pipeline scans, days after the developer wrote the code. By then, the developer has moved on to other work and has to context-switch back to fix it. Dependency Analytics catches the issue in real time, while the developer is actively working on the file. The fix takes seconds instead of hours."
-
-**If asked:**
-
-Q: "What vulnerability databases does it use?"::
-A: "Dependency Analytics uses Red Hat's vulnerability data, which includes CVE databases (https://github.com/github/advisory-database[GitHub Advisory Database^], https://github.com/CVEProject/cvelistV5[CVE Project Database^] from https://www.cve.org/[cve.org]), Red Hat security advisories, and known exploit information. It covers both direct and transitive dependencies."
-
-Q: "Can it be used in air-gapped / restricted environments?"::
-A: "Dependency Analytics uses a hosted, free public good instance of Red Hat Trusted Profile Analyzer (RHTPA) provided by Red Hat at no cost. Customers can configure their own RHTPA instance as backend for their developers, removing the need for Internet access"
-
-Q: "Does this work for languages other than Java?"::
-A: "Yes. Dependency Analytics supports Java (Maven, Gradle), JavaScript (npm), Python (pip), and Go. The plugin scans the appropriate dependency file for each language."
 
 '''
 
@@ -267,20 +254,6 @@ image::pipeline-conforma-report.png[The conforma report showing policy evaluatio
 
 "Every artifact that comes out of this pipeline has a cryptographic signature proving it is genuine, an SBOM listing every component inside it, and a SLSA attestation proving how it was built. And the developer saw the entire process from Developer Hub without switching between tools. That is what a trusted software supply chain looks like."
 
-**If asked:**
-
-Q: "What is SLSA attestation?"::
-A: "SLSA (Supply-chain Levels for Software Artifacts) is a framework for ensuring software supply chain integrity. The attestation proves how the artifact was built: which source code, which build system, which steps, which sources, which parameters."
-
-Q: "Which SLSA policies are enforced?"::
-A: "Red Hat provides a large set of policies and rules to validate image attributes and attestation content. These can be used as-is or can be tailored based on requirements. Custom rules and policies can easily be defined, for example to verify if a specific task with specific inputs and outputs has been run during the artifact production. (e.g. was the release tag created by an allowed person, does the release pipeline include a scan task and what results did it generate, etc.)"
-
-Q: "Can we customize which policies ACS enforces?"::
-A: "Yes. ACS policies are fully configurable by the platform team. They can set thresholds for vulnerability severity, block specific CVEs, enforce base image requirements, and more."
-
-Q: "Why create the merge request separately instead of the pipeline doing it?"::
-A: "The developer verifies their work in the development environment before requesting a merge. This is an intentional workflow: the developer confirms the feature works, then requests review. The platform engineer controls when code is promoted to production by merging and creating a release tag."
-
 [#summary]
 == Module 5 summary
 
@@ -295,10 +268,3 @@ In this module, you saw how the secure development workflow protects the softwar
 === Setting up Module 6
 
 The secure build pipeline has produced a signed image with full attestation, ready to be promoted to production. In Module 6, we will see how SBOMs are managed through the Trusted Profile Analyzer and how the application topology provides visibility into the complete system.
-
-=== Presenter transition
-
-[NOTE]
-====
-**Presenter tip:** The transition to Module 6 should emphasize the trust chain: "We have built a signed, attested artifact with a complete SBOM. The platform engineer approved the merge request and created a release. Now let's see how the organization manages the SBOM data for compliance and how the complete system looks in production."
-====

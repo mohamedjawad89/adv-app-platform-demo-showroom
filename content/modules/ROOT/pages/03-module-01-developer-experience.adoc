@@ -2,8 +2,6 @@
 include::partial$_attributes.adoc[]
 :imagesdir: ../assets/images
 
-*Presenter note*: This module sets the scene with application modernization context, then follows a new developer joining Parasol who opens the app in DevSpaces and adds a new API endpoint using Quarkus dev mode. The code works but contains code smells (improper logging and empty exception handling), which sets up the pipeline failure in Module 2. The module closes with a platform engineer perspective on managing DevSpaces environments. Target duration: 30 minutes across 4 parts.
-
 [#part-1]
 == Part 1 — Setting the scene: Application modernization
 
@@ -34,7 +32,7 @@ The Migration Toolkit for Applications (MTA) provides automated analysis of exis
 
 [NOTE]
 ====
-**Presenter note:** This section is a talk track only. There is no live demo for the MTA migration. The application has already been migrated. Use the talking points below to set the context for the audience.
+This section is context only — there is no live demo for the MTA migration. The application has already been migrated.
 ====
 
 **What I say:**
@@ -52,20 +50,6 @@ The important thing to understand is that this modernization step is the foundat
 **Business value callout:**
 
 "Application modernization is often the first and most critical step in an enterprise platform transformation. MTA reduces the risk and effort of migration by providing automated analysis and guided remediation. For Parasol, this unlocked the ability to adopt cloud native development practices, automated CI/CD, and platform-managed operations, all of which we will see in this demo."
-
-**If asked:**
-
-Q: "How long did the migration take?"::
-A: "Migration timelines vary based on application complexity. MTA categorizes issues by effort level, so teams can plan iteratively. Many organizations start with the highest-value, lowest-effort migrations and build momentum. MTA also supports analyzing Spring Boot applications for migration to Quarkus, as well as migrations between OpenShift versions."
-
-Q: "Can you show us MTA?"::
-A: "MTA is available as part of the OpenShift platform. In this demo we focus on the results of the migration, the modernized Quarkus application, and what it enables. For a detailed MTA walkthrough, there are dedicated MTA demos and workshops available."
-
-Q: "Does MTA handle all types of migrations?"::
-A: "MTA supports a wide range of migration paths: Java EE to Quarkus, Spring Boot to Quarkus, WebLogic to JBoss EAP, and migrations between OpenShift versions. It also supports cloud-to-cloud migrations. The analysis rules are extensible, so teams can add custom rules for proprietary frameworks."
-
-Q: "What about the database and other dependencies?"::
-A: "MTA focuses on the application code and configuration. Database migrations, schema changes, and infrastructure dependencies are handled separately, though MTA's analysis identifies those dependencies so teams can plan accordingly."
 
 '''
 
@@ -167,20 +151,6 @@ image::devspaces-workspace-loaded.png[Cloud development workspace with the Paras
 
 "What used to take Parasol developers 1-2 weeks just happened in under 2 minutes. The developer clicked one button on the running application and got a fully configured workspace. Every single developer gets the exact same environment, eliminating 'works on my machine' issues entirely. Platform engineers define the workspace once in the devfile, and it becomes the golden path for the entire team."
 
-**If asked:**
-
-Q: "Can developers customize their workspace?"::
-A: "Yes. The devfile provides the baseline, but developers can add personal preferences like themes and keybindings. The important thing is the toolchain, SDKs, and security policies are standardized by the platform team."
-
-Q: "What happens if a developer loses their internet connection?"::
-A: "The workspace state is preserved in the cluster. When they reconnect, they pick up exactly where they left off. No work is lost."
-
-Q: "How does this handle different projects with different requirements?"::
-A: "Each project repository contains its own devfile. A Python project gets Python tooling, a Java project gets Java tooling. Developers just open the repository, and the right environment appears."
-
-Q: "What about VS Code desktop? Do developers have to use the browser?"::
-A: "Dev Spaces supports connecting from VS Code desktop as well. Developers can use the browser-based IDE or their local VS Code installation connecting to the remote workspace. The workspace still runs in the cluster either way."
-
 '''
 
 [#part-3]
@@ -221,11 +191,6 @@ Quarkus dev mode provides live reload and continuous testing capabilities that r
 * Type and select **Tasks: Run Task**
 * Select the **devfile** task group
 * Select **Start Development Mode (Hot Reload + debug)**
-+
-[NOTE]
-====
-**Presenter tip:** The devfile defines this task so every developer gets the same startup experience. The platform engineer configured it, and the developer just selects it from the menu. No need to remember Maven commands or flags.
-====
 
 . Show the application starting and the development mode output:
 * Live coding is active
@@ -318,17 +283,6 @@ image::quarkus-dev-mode-live-reload.png[Development mode terminal showing live r
 
 "That code change was reflected in under 3 seconds. At Parasol's current pace, developers wait 20-30 minutes per iteration. Multiply that across 200 developers making 10 changes a day, and you are talking about thousands of hours recovered every month. Quarkus dev mode keeps developers in flow state and dramatically accelerates feature delivery."
 
-**If asked:**
-
-Q: "Does this work with other languages besides Java?"::
-A: "Red Hat supports multiple runtimes including Node.js, Python, .NET, and Go through OpenShift application runtimes. The live reload experience varies by framework, but the principle of fast feedback is consistent."
-
-Q: "Why not catch the code smells in dev mode?"::
-A: "Quarkus dev mode focuses on fast feedback for functional changes: does the code compile, does it run, does it produce the right output. Code quality enforcement happens in the developer's CI/CD pipeline, where SonarQube applies organizational coding standards. This separation keeps the inner loop fast while the outer loop enforces quality."
-
-Q: "What about debugging?"::
-A: "Development mode includes full debugging support. Developers can set breakpoints, inspect variables, and step through code directly in the cloud IDE. The experience is identical to a local IDE. Quarkus also features continuous testing, re-running tests automatically as code changes."
-
 [#part-4]
 == Part 4 — Managing DevSpaces environments (platform engineer persona)
 
@@ -385,11 +339,6 @@ image::devfile-registry-viewer.png[Devfile registry viewer showing available com
 * "This is where the platform engineer fine-tunes DevSpaces for the organization. Resource limits, idle timeouts, storage policies, default IDE configuration. These settings apply to every workspace across the cluster."
 +
 image::devspaces-checluster-cr.png[OpenShift console showing the CheCluster custom resource with DevSpaces configuration parameters,link=self,window=blank,align="center",width=700,title="DevSpaces operator configuration via custom resource"]
-+
-[NOTE]
-====
-**Presenter tip:** Do not spend too much time on individual CR fields. The goal is to show that the platform engineer has centralized control, not to walk through every configuration option. Highlight 2-3 settings that resonate with the audience (resource limits, idle timeout, and max workspaces are usually the most interesting).
-====
 
 . Navigate to **Ecosystem** → **Software Catalog**
 * Show the available, customizable categories of pre-vetted services that developers and platform engineers can use when working directly in OpenShift. Platform engineers can customize this for their environment. For example, the platform engineer can set up a shared database service that developers can connect to from their applications without needing to configure credentials or network access, or remove access to certain services that are not approved for use in development environments.
@@ -461,17 +410,6 @@ This workspace takes several minutes to start as it downloads open-source AI mod
 
 "The platform engineer defines the golden path once: choose a devfile stack from the registry, customize it for the organization, and configure workspace policies through the operator. Every developer gets the same governed environment automatically. No more 20-30 support tickets per week for environment issues. No more security blind spots from unmanaged developer workstations."
 
-**If asked:**
-
-Q: "Can different teams have different devfile configurations?"::
-A: "Yes. Each application repository contains its own devfile. A Java team gets Java tooling, a Python team gets Python tooling. The platform engineer can provide a base devfile template and let teams customize within guardrails."
-
-Q: "What happens when a devfile is updated?"::
-A: "When the devfile in the repository is updated, all new workspaces created from that repository use the updated configuration. Existing running workspaces are not affected until they are restarted."
-
-Q: "Can the platform engineer restrict which container images are used?"::
-A: "Yes. The DevSpaces operator supports configuring trusted image registries and restricting which images can be used in devfiles. This ensures that only approved, scanned images are used in developer workspaces."
-
 '''
 
 [#summary]
@@ -489,10 +427,3 @@ In this module, you saw how Parasol Insurance modernized their application and t
 === Setting up Module 2
 
 Our new developer has added a claims statistics endpoint and verified it works in dev mode. But the code has shortcuts: `System.out.println` instead of proper logging and an empty catch block that silently swallows exceptions. When they push this code and it triggers the CI/CD pipeline in Module 2, SonarQube is going to flag those code smells. This is where the platform's guardrails come in: the pipeline enforces code quality standards that the developer's inner loop does not.
-
-=== Presenter transition
-
-[NOTE]
-====
-**Presenter tip:** The transition to Module 2 should feel natural: "Our developer is happy with their new endpoint — it works and returns the right data. They are going to push it. But remember those shortcuts in the code? Let's see what the platform's CI/CD pipeline has to say about that." This creates anticipation and a continuous narrative thread.
-====

@@ -2,8 +2,6 @@
 include::partial$_attributes.adoc[]
 :imagesdir: ../assets/images
 
-*Presenter note*: This is Section 3 (Intelligent Applications). The Parasol application is running with a keyword-based email routing system that sends ambiguous emails to "Review Required" for manual triage. A new developer ({dev2_user}) is tasked with replacing this with LLM-powered classification. They log in to Developer Hub, create a new development environment using the "Parasol Insurance Secured Development" template with branch name `llm-routing`, pull in the LLM classification code from a prepared branch, and push it through the pipeline. The result is intelligent email routing with no more manual review. Target duration: 15 minutes across 3 parts.
-
 [NOTE]
 ====
 Section 3 builds on everything from Sections 1 and 2. The foundational platform is in place, the secure supply chain is operational, and now the organization is ready to integrate AI capabilities into their applications. This section shows that the same platform patterns -- DevSpaces, pipelines, and GitOps -- apply seamlessly to AI-enhanced workloads.
@@ -38,11 +36,6 @@ The application platform makes AI integration a standard development activity, n
 
 === Show
 
-[NOTE]
-====
-**Presenter note:** This section sets context with a brief talk track and a look at the current application state. The key message is that the platform makes AI integration follow the same golden path as any other development activity.
-====
-
 **What I say:**
 
 "Parasol's applications are running smoothly. The CI/CD pipeline is automated, the supply chain is trusted, and the platform handles operations. Now the CIO has a new mandate: use AI to solve a real business problem.
@@ -66,14 +59,6 @@ image::parasol-inbox-review-required.png[Parasol Insurance Inbox screen showing 
 
 "Manual email triage costs Parasol significant staff hours across their claims organization. An AI-powered routing service can evaluate and route emails in seconds with full context understanding, freeing claims administrators to focus on high-value work like complex claims resolution."
 
-**If asked:**
-
-Q: "Where is the LLM running?"::
-A: "The model is available as an API endpoint. In this demo, it is hosted on the Red Hat Demo Platform, which uses OpenShift AI for model serving. In production, organizations can run models on-premises with Red Hat AI or consume models from hosted providers. The application platform does not care where the model lives -- the developer just needs an endpoint URL and an API key, both managed through Vault."
-
-Q: "What about model governance and responsible AI?"::
-A: "Model governance is handled by the data science and platform teams. The application developer consumes a governed, approved endpoint that is pre-configured via software templates. The same trusted software supply chain from Section 2 ensures the AI-enhanced code is scanned, signed, and attested before reaching production."
-
 '''
 
 [#part-2]
@@ -86,7 +71,7 @@ _Another developer (`{dev2_user}`) is tasked with improving the email routing. T
 [NOTE]
 ====
 This demo focuses on the _value of the platform_, including runtimes like Quarkus, but is not intended to be a deep dive on
-coding exercises. Therefore, you as a demoer will not write the new code to implement the AI-based triage, but instead
+coding exercises. Therefore, you will not write the new code to implement the AI-based triage, but instead
 use a few git commands to pull in the pre-built AI code from a prepared branch, overlaying it onto the current feature branch (this could also be done by a more powerful LLM using a code assistant).
 ====
 
@@ -166,11 +151,6 @@ image::devspaces-application-properties.png[DevSpaces IDE showing application.pr
 * `src/main/resources/application.properties` -- Kafka, LLM, and database configuration
 * `src/main/resources/META-INF/resources/inbox.html` -- the inbox UI
 * "This is the complete Parasol application. The LLM integration adds one new file and modifies one existing file. Everything else stays the same."
-+
-[NOTE]
-====
-**Presenter tip:** If time permits, the demoer can start Quarkus dev mode to show the LLM classification working locally before pushing. Use kbd:[CTRL+SHIFT+P] (or kbd:[CMD+SHIFT+P] on Mac) -> Tasks: Run Task -> devfile -> Start Development Mode. Open the app in a new tab when prompted and navigate to the Inbox to see emails being classified by the LLM in real time - it can take up to 30 seconds for a new email to appear in the list.
-====
 
 . Push the code (same as previous sections):
 * In **DevSpaces**, use the **Source Control** view in the left sidebar
@@ -197,17 +177,6 @@ image::scm-commit.png[SCM Commit pricess,link=self,window=blank,align="center",w
 **Business value callout:**
 
 "What you just saw is AI integration following the exact same development workflow. A new developer logged in, provisioned a development environment through self-service, and was productive in minutes. They did not need to configure API keys or use any special tools. The platform engineer pre-configured the LLM endpoint through external secrets (which we saw in Module 5), and the developer implemented the feature using a standard Quarkus extension. One new file, one modified file, and a git push. That is how the platform makes AI a standard part of development."
-
-**If asked:**
-
-Q: "Can the developer customize the LLM prompt?"::
-A: "Yes. The system prompt in `EmailClassifier.java` is fully customizable. The developer defines the classification criteria, the department descriptions, and the response format. The LLM client is just a Quarkus extension. The developer has full control."
-
-Q: "What happens if the LLM is unavailable?"::
-A: "The code includes a fallback to the original keyword matching logic. If the LLM call fails for any reason, emails are still classified using the keyword approach. The fallback is logged for visibility."
-
-Q: "How do you handle the LLM API key securely?"::
-A: "The API key is managed through the same external secrets pattern from Module 3. It is stored in Vault as `litellm-credentials` and injected at runtime. The developer never sees or commits the actual key."
 
 '''
 
@@ -290,20 +259,6 @@ The developer's sandbox pipeline (in their namespace) is separate — it only bu
 
 "Let me recap what just happened. A new developer received a task to add AI-powered email routing. They logged into Developer Hub, provisioned a development environment through self-service, pulled in the LLM integration code from a prepared branch, reviewed it, and pushed it through the secure pipeline. The platform handled everything else: the LLM credentials came from Vault, the pipeline scanned and signed the image, and Argo CD deployed it. The result? The 'Review Required' bucket is gone. Every email gets an intelligent classification with a clear explanation. Manual triage costs just dropped to near zero. And it went through the exact same security and compliance controls as every other component."
 
-**If asked:**
-
-Q: "What about data privacy for the email content?"::
-A: "That depends on the deployment model. If the organization runs the LLM on-premises with Red Hat AI, no data leaves their infrastructure. If they use a hosted provider, they need to evaluate the provider's data handling policies. The application platform supports both models."
-
-Q: "Can this pattern be applied to other AI use cases?"::
-A: "Absolutely. The LangChain4j integration is a standard Quarkus extension. Any team can add LLM capabilities to their application the same way: add the dependency, create an AI service interface, and configure the endpoint through external secrets. The golden path scales across use cases."
-
-Q: "What if we want to use a different model?"::
-A: "The LLM endpoint is configurable through Vault. Switching to a different model means updating the endpoint URL and API key in Vault. The application code does not change. Platform engineers can also configure the template with multiple approved models, allowing developers to choose a best fit for their use case."
-
-Q: "How does the claims administrator verify the AI's decisions?"::
-A: "Every classification includes the LLM's reasoning. The administrator can see why each email was routed to a specific department. If they disagree, they can manually reassign it. Over time, these corrections can inform prompt improvements."
-
 [#summary]
 == Section 3 summary
 
@@ -327,10 +282,3 @@ Across all three sections, you saw a complete application platform transformatio
 === Key takeaway
 
 "The platform is the product. Whether a developer is adding a simple feature, building a new component, or integrating AI capabilities, they use the same golden path: Developer Hub templates, DevSpaces environments, automated pipelines, and GitOps delivery. The platform handles security, compliance, and operations automatically. That is what an application platform delivers."
-
-=== Presenter wrap-up
-
-[NOTE]
-====
-**Presenter tip:** End with a clear call to action relevant to your audience. For prospects, suggest a workshop or proof of concept starting with Section 1 capabilities. For existing customers, recommend advancing to Section 2 (supply chain security) or Section 3 (AI) based on what resonated during the demo. The email routing use case is relatable across industries. Ask the audience: "What manual triage process in your organization could benefit from this same pattern?"
-====

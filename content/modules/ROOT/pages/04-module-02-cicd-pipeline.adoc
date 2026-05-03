@@ -2,8 +2,6 @@
 include::partial$_attributes.adoc[]
 :imagesdir: ../assets/images
 
-*Presenter note*: This module continues directly from Module 1. The developer pushes code with code smells (improper logging and empty exception handling), the Tekton pipeline catches them via SAST/Sonarqube, the developer fixes the issues in DevSpaces, and Argo CD handles deployment. The pipeline is viewed in the OpenShift web console and the deployment sync is viewed in the Argo CD console. Target duration: 15 minutes across 3 parts.
-
 [#part-1]
 == Part 1 — Triggering the pipeline
 
@@ -68,17 +66,6 @@ image::ocp-pipeline-running.png[OpenShift web console Pipelines view showing a T
 **Business value callout:**
 
 "At Parasol today, getting code from a developer's machine into a running environment takes 3-5 days of manual handoffs. What you just saw happened in seconds. The developer pushed code and the platform immediately started building, testing, and scanning it. No tickets, no waiting, no human bottleneck."
-
-**If asked:**
-
-Q: "Can we use our existing Jenkins pipelines?"::
-A: "Yes. OpenShift supports both Tekton (the built-in pipeline engine) and external CI systems like Jenkins, GitLab CI, or GitHub Actions. Many organizations run both during a transition period. The key point is that the pipeline is automated and standardized, regardless of which engine runs it."
-
-Q: "Who defines the pipeline stages?"::
-A: "The platform engineering team defines the pipeline templates as Tekton resources in the cluster. Developers do not need to write pipeline configurations. When the application repository is set up, the pipeline is already wired to trigger on push."
-
-Q: "How long does a typical pipeline run take?"::
-A: "A full pipeline run with build, test, and scanning typically completes in 3-5 minutes for a Quarkus application. The exact time depends on the application size, test suite, and scan depth."
 
 '''
 
@@ -225,11 +212,6 @@ public class ClaimsStatsResource {
 	}
 }
 ----
-+
-[NOTE]
-====
-**Presenter tip:** Depending on the audience, you fan walk through the diff briefly. Point out that `System.out.println` was replaced with `Log.info` from the Quarkus logging API -- this gives structured logging with timestamps, log levels, and integration with the platform's observability stack. And the empty try-catch was removed entirely -- if something goes wrong, the exception propagates and the platform's error handling surfaces it properly instead of hiding it. Emphasize that the AI understood the context and made the right fixes without the developer needing to look up the Quarkus logging API. The field-level injection was also moved to constructor injection, which is a best practice for testability and clearer dependencies. The platform's guardrails (Sonarqube) and AI assistance (Continue) worked together to enforce and achieve code quality.
-====
 
 . Commit and push the fix using the **Source Control** view as before.
 * The modified `ClaimsStatsResource.java` appears under "Changes"
@@ -260,20 +242,6 @@ image::ocp-pipeline-passed.png[OpenShift web console showing all pipeline stages
 **Business value callout:**
 
 "This is the platform's guardrail and AI assistance working together. At Parasol, code smells like these accumulate across hundreds of developers and thousands of commits. Each one seems minor, but together they create a codebase that is difficult to debug, difficult to maintain, and prone to silent failures. The platform caught the problems automatically, and the AI fixed them in seconds. The developer did not need to look up the Quarkus logging API or research exception handling best practices. The platform enforced the standard, the AI resolved it, and the code is now production-ready."
-
-**If asked:**
-
-Q: "What if the developer disagrees with the quality gate?"::
-A: "Quality gates are defined by the platform team based on organizational standards. They are not optional for individual developers. However, the platform team can adjust thresholds and rules as the organization matures. The goal is to establish a baseline that everyone follows."
-
-Q: "What other code smells does Sonarqube catch?"::
-A: "Sonarqube enforces hundreds of coding rules across multiple dimensions: code smells (complexity, duplication, naming conventions), bugs (null pointer risks, resource leaks, logic errors), vulnerabilities (SQL injection, XSS, hardcoded credentials), and security hotspots. The platform team configures which rules are active and which are quality gate blockers. The platform team can integrate with other scanning tools as well if they want to cover additional languages or specific security checks."
-
-Q: "Why not catch these in the IDE before pushing?"::
-A: "IDE plugins like SonarLint can surface some issues during development, and organizations can enable that as well. But the pipeline quality gate is the authoritative enforcement point — it ensures standards are met regardless of what tools the developer has configured locally. Defense in depth: catch what you can early, enforce what you must in the pipeline."
-
-Q: "What about more complex issues like security vulnerabilities?"::
-A: "Sonarqube handles SAST (Static Application Security Testing) in addition to code smell detection. In Section 2 of this demo, we add additional security layers: Trusted Artifact Signer for code signing and provenance, ACS for container image scanning, Tekton Chains for image signing, and admission control for deployment verification. The pipeline is extensible."
 
 '''
 
@@ -367,20 +335,6 @@ image::argocd-promote.png[Argo promotion,link=self,window=blank,align="center",w
 
 "Let me recap the journey. In Module 1, a developer added a claims statistics endpoint in minutes using DevSpaces and Quarkus dev mode. They pushed the code, and the platform's CI/CD pipeline caught code smells — improper logging and an empty catch block. The developer fixed both issues in minutes, pushed again, and the pipeline passed. Argo CD deployed the change automatically through GitOps. What used to take Parasol 3-5 days of manual handoffs, tickets, and approvals just happened in minutes, with zero human bottlenecks and full quality enforcement."
 
-**If asked:**
-
-Q: "What happens if the deployment fails?"::
-A: "Argo CD supports automatic rollback. If the new version fails health checks, Argo CD can revert to the previous healthy state. The rollback is also captured in Git, so there is a full audit trail of what was deployed and when."
-
-Q: "Can we deploy to multiple environments?"::
-A: "Yes. Argo CD can manage multiple environments (dev, staging, production) with promotion gates between them. Each environment has its own Git configuration, and promotion is as simple as merging a change from one branch to another."
-
-Q: "What about configuration differences between environments?"::
-A: "Argo CD supports Kustomize overlays and Helm values files for environment-specific configuration. The base application definition is the same, but each environment can override specific values like replica counts, resource limits, or feature flags."
-
-Q: "What if someone makes a manual change in the cluster?"::
-A: "Argo CD detects configuration drift and can automatically correct it. If someone manually changes a deployment in the cluster, Argo CD reverts the change to match what is declared in Git. Git is always the source of truth."
-
 [#summary]
 == Module 2 summary
 
@@ -396,10 +350,3 @@ In this module, you saw how the platform's CI/CD pipeline enforces quality and a
 === Setting up Module 3
 
 The application is now deployed in production with the new feature, having passed all quality gates. In Module 3, we will see how the platform handles the operational concerns: traffic management, security, and observability across the deployed services.
-
-=== Presenter transition
-
-[NOTE]
-====
-**Presenter tip:** The transition to Module 3 should emphasize the shift from development to operations: "Now that the application is deployed and verified, let's look at how the platform handles the operational side, the cross-cutting concerns that every application needs but no individual developer should have to build."
-====

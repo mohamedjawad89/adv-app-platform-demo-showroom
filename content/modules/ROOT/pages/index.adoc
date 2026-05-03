@@ -3,11 +3,10 @@ include::partial$_attributes.adoc[]
 
 **What this demo covers**
 
-This demonstration shows why Red Hat OpenShift is more than container management. While any Kubernetes distribution can orchestrate containers, OpenShift delivers a complete application platform above the Kubernetes API: integrated development environments, automated CI/CD, a trusted software supply chain, a developer portal with self-service, and AI-ready application delivery. Through the Parasol Insurance scenario, presenters walk customers through the full platform story in three progressive sections, from foundational capabilities to advanced developer services to intelligent applications.
+This demonstration shows why Red Hat OpenShift is more than container management. While any Kubernetes distribution can orchestrate containers, OpenShift delivers a complete application platform above the Kubernetes API: integrated development environments, automated CI/CD, a trusted software supply chain, and a developer portal with self-service. Through the Parasol Insurance scenario, you will walk through the full platform story in two progressive sections, from foundational capabilities to advanced developer services.
 
 **Preparation**
 
-* xref:01-overview.adoc[Overview and presenter preparation]
 * xref:02-details.adoc[Environment details and setup]
 
 **Section 1: Foundational application platform**
@@ -26,11 +25,14 @@ Move from "good to great." Red Hat Developer Hub as the single pane of glass for
 * xref:07-module-05-secure-development.adoc[Module 5: Secure development workflow] — Dependency Analytics in DevSpaces, secure build pipeline with signing and attestation
 * xref:08-module-06-supply-chain.adoc[Module 6: Trusted software supply chain] — Production deployment with admission control, SBOM management with TPA, and application topology
 
+////
+Section 3 hidden — re-enable by removing the //// markers
 **Section 3: Intelligent applications**
 
 Show that AI-enhanced applications follow the same golden path. Developers consume LLM endpoints as standard API calls, process business data from Kafka (Red Hat AMQ Streams), and deploy through the same trusted pipeline. The platform does not care where the model runs — on-premises with Red Hat AI or through a hosted provider.
 
 * xref:09-module-07-ai-applications.adoc[Module 7: AI-enhanced applications] — Building an AI-powered email routing service with DevHub templates, LLM integration, Kafka data processing, and trusted delivery
+////
 
 **Target audience**
 
@@ -38,4 +40,4 @@ Sales engineers, solution architects, and technical sellers positioning OpenShif
 
 **Demo duration**
 
-Each section is approximately 45 minutes (15 minutes per module). Sections can be presented independently or combined. Section 1 establishes the foundation, Section 2 demonstrates the "good to great" progression, and Section 3 adds the intelligent applications story.
+Each section is approximately 45 minutes (15 minutes per module). Sections can be presented independently or combined. Section 1 establishes the foundation and Section 2 demonstrates the "good to great" progression.

@@ -2,8 +2,6 @@
 include::partial$_attributes.adoc[]
 :imagesdir: ../assets/images
 
-*Presenter note*: This module shows how the platform handles cross-cutting operational concerns after the application is deployed in production. It covers Service Mesh for traffic management and security, OpenShift Observability, autoscaling with HPA, and external secrets management with Vault. Target duration: 20 minutes across 4 parts.
-
 [#part-1]
 == Part 1 — Traffic management and security with Service Mesh
 
@@ -51,7 +49,7 @@ Service Mesh provides traffic management, mTLS encryption, and fine-grained acce
 +
 [NOTE]
 ====
-**Presenter tip:** Do not actually create/edit the policy. The goal is to show the capability and explain the business value. Cancel out of the form after showing it.
+This part is for illustration only. Do not actually create or edit the policy — cancel out of the form after reviewing it.
 ====
 
 . Briefly discuss **access policies** (talk track):
@@ -70,17 +68,6 @@ image::ossm-console-overview.png[OpenShift Service Mesh console showing the Para
 **Business value callout:**
 
 "At Parasol today, service-to-service communication is unencrypted, and compliance audits flag it every quarter. Implementing mTLS in application code would require changes to every service, months of development work, and ongoing maintenance. The mesh handles it as a platform capability. The platform team enabled it once, and it applies to every service automatically. The compliance gap is closed without any developer effort."
-
-**If asked:**
-
-Q: "Does this add latency to requests?"::
-A: "The sidecar proxy adds minimal latency, typically less than 1 millisecond per hop. For the vast majority of applications, this is negligible compared to the security and observability benefits. Ambient mode reduces this even more by eliminating the sidecar for certain workloads."
-
-Q: "What about services that are not in the mesh?"::
-A: "Services can be enrolled in the mesh incrementally. The platform team can start with critical services and expand over time. Services outside the mesh can still communicate, but they do not get mTLS or traffic management benefits."
-
-Q: "Can we do canary deployments with this?"::
-A: "Yes. Service Mesh supports traffic splitting, where you can route a percentage of traffic to a new version while the rest goes to the stable version. This is configured through the mesh, not in application code."
 
 '''
 
@@ -197,20 +184,6 @@ oc delete pod load-generator -n {parasol_prod_ns}
 
 "At Parasol, when a cross-service issue occurs, the operations team spends hours correlating logs across services to find the root cause. With the Service Mesh console, they can see the problem in seconds: which service is failing, what the error rate is, and how it affects downstream services. Add in the platform's built-in workload monitoring with customizable dashboards and proactive alerts, and you have a complete observability picture -- from individual service metrics to aggregate resource consumption. This reduces mean time to resolution from hours to minutes. And none of this required any changes to the application code. The platform provides it automatically."
 
-**If asked:**
-
-Q: "Does this replace our monitoring stack?"::
-A: "No. Service Mesh observability complements your existing monitoring. It focuses specifically on service-to-service communication: traffic flow, error rates, and latency between services. Your existing Prometheus, Grafana, and AlertManager stack continues to handle infrastructure and application-level metrics."
-
-Q: "Can developers access this?"::
-A: "Yes. The Service Mesh console is accessible through the OpenShift web console with appropriate RBAC permissions. Both platform engineers and developers can view the service graph and metrics for their namespaces."
-
-Q: "What about distributed tracing?"::
-A: "Service Mesh supports distributed tracing through integration with OpenTelemetry and Jaeger. This allows you to trace individual requests as they flow through multiple services, identifying exactly where latency or errors occur in the chain."
-
-Q: "How does this scale to larger environments?"::
-A: "The graph automatically adapts to the number of services. In larger environments, you can filter by namespace, application, or label to focus on specific areas. The underlying data collection scales with the mesh."
-
 '''
 
 [#part-3]
@@ -300,20 +273,6 @@ oc delete pod load-generator -n {parasol_prod_ns}
 **Business value callout:**
 
 "At Parasol, the operations team manually scales deployments when performance degrades -- a reactive process that adds 10-15 minutes of response time and impacts customer experience. With the HPA, the platform responds to demand changes in seconds, automatically. During peak hours, the application scales up. During off-peak hours, it scales back down, saving infrastructure costs. And with KEDA, event-driven workloads like email processing can scale based on queue depth, not just CPU. The platform handles it all automatically."
-
-**If asked:**
-
-Q: "How fast does the HPA react?"::
-A: "The HPA checks metrics every 15 seconds by default. Scale-up typically happens within 30-60 seconds of the threshold being exceeded. Scale-down is more conservative -- the HPA waits 5 minutes by default to avoid flapping."
-
-Q: "Can we scale based on custom metrics?"::
-A: "Yes. The HPA supports custom metrics through the Prometheus adapter. You can scale based on any metric that Prometheus collects -- request rate, queue depth, response latency, or business-specific metrics."
-
-Q: "What about scaling the cluster itself?"::
-A: "The Cluster Autoscaler monitors pending pods that cannot be scheduled due to insufficient resources. When it detects unschedulable pods, it provisions new worker nodes through Machine Autoscaler. When nodes are underutilized, it drains and removes them. This is fully automated."
-
-Q: "How does KEDA differ from the HPA?"::
-A: "The HPA scales based on pod-level metrics like CPU and memory. KEDA scales based on external event sources: Kafka topic lag, HTTP queue length, database query count, or any custom scaler. KEDA can also scale to zero, which the HPA cannot. This makes KEDA ideal for event-driven and batch workloads."
 
 '''
 
@@ -414,17 +373,6 @@ spec:
 
 "At Parasol, some teams store secrets in Git, others use Kubernetes secrets directly. Neither approach provides centralized management, rotation, or audit trails. With Vault and the External Secrets Operator, every secret is centrally managed, automatically rotated, and fully audited. The developer never sees the actual values, and compliance requirements are satisfied automatically."
 
-**If asked:**
-
-Q: "What happens if Vault is unavailable?"::
-A: "The Kubernetes secrets that were already synced continue to work. The External Secrets Operator retries on the next refresh interval. Applications are not affected by temporary Vault outages."
-
-Q: "Can different teams have different access to secrets?"::
-A: "Yes. Vault supports fine-grained access control policies. Each team can only access secrets for their applications and environments."
-
-Q: "Do we have to use Vault specifically?"::
-A: "The External Secrets Operator supports multiple backends: HashiCorp Vault, AWS Secrets Manager, Azure Key Vault, Google Secret Manager, and others."
-
 [#summary]
 == Section 1 summary
 
@@ -445,10 +393,3 @@ A new developer joined Parasol, clicked one button to open the app in DevSpaces,
 * Automated guardrails enforce quality and security without slowing developers down
 * GitOps and Service Mesh provide enterprise-grade delivery and operations
 * The same platform foundations support AI adoption and multi-cloud strategies
-
-=== Presenter wrap-up
-
-[NOTE]
-====
-**Presenter tip:** End with a clear call to action relevant to your audience. For prospects, suggest a workshop or proof of concept. For existing customers, recommend specific capabilities to adopt next based on what resonated during the demo. If continuing to Section 2, transition with: "Everything we showed is the foundational platform. In Section 2, we layer on advanced developer services: a developer portal, secure supply chain, and compliance automation."
-====

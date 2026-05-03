@@ -2,8 +2,6 @@
 include::partial$_attributes.adoc[]
 :imagesdir: ../assets/images
 
-*Presenter note*: This is the final module of Section 2 (Advanced Application Platform). It covers SBOM management through TPA for compliance visibility, and the application topology view showing the complete Parasol system in production. Target duration: 10 minutes across 2 parts.
-
 [#part-1]
 == Part 1 — SBOM management with TPA
 
@@ -117,17 +115,6 @@ image::tpa-sbom-search-by-license.png[link=self,window=blank,width=600,title="SB
 
 "When the next Log4Shell happens, Parasol's security team will not spend weeks figuring out which applications are affected. They will search TPA and know in seconds. Every application, every version, every dependency. And because SBOMs are generated for every build, this data is always current."
 
-**If asked:**
-
-Q: "How often are SBOMs updated?"::
-A: "A new SBOM is generated for every pipeline run. Every time an image is built, the SBOM reflects the current state of dependencies."
-
-Q: "How often are CVEs updated?"::
-A: "Vulnerability data isn't static - new problems are identified daily. RHTPA ingests the CVE and Advisory data by default every 4 hours, but that can be configured. New data is applied to all existing SBOMs in the database - it's not just a point-in-time scan"
-
-Q: "Can we export SBOM data for auditors?"::
-A: "Yes. TPA supports standard SBOM formats (SPDX, CycloneDX). SBOMs can be exported for external auditors, regulatory submissions, or integration with other compliance tools."
-
 '''
 
 [#part-2]
@@ -203,10 +190,3 @@ Section 2 tells the story of a complete trusted software supply chain: the devel
 * The secure build pipeline integrates security scanning, signing, and attestation into a single flow
 * SBOM management with TPA provides continuous compliance visibility
 * The entire supply chain is automated, with intentional manual gates: merge request approval and release tagging
-
-=== Presenter transition
-
-[NOTE]
-====
-**Presenter tip:** If continuing to Section 3, the transition should set up the AI use case: "We have built a trusted, secure application platform with full supply chain visibility. Now Parasol's CIO wants to take the next step: using AI to enhance the application's email routing. Let's see how the same platform makes that possible."
-====

@@ -1,8 +1,6 @@
 = Environment details and setup
 include::partial$_attributes.adoc[]
 
-*Presenter note*: Review this section before your demo to familiarize yourself with the environment components and access details. Not all components are used in every section — check which section(s) you are presenting. 
-
 == Demo personas
 
 This demo uses two SSO (Keycloak) personas. Both use the common password `{password}`. Use these credentials for the OpenShift console, GitLab, Dev Spaces, and Developer Hub.
@@ -72,10 +70,13 @@ Throughout the modules you'll work on applications belonging to a fictitious com
 * **Dependency Analytics** - IDE plugin for real-time dependency vulnerability scanning
 * **Apache Kafka** - Event streaming for business data (pre-existing in the demo environment) (also used in section 3)
 
+////
+Section 3 hidden — re-enable by removing the //// markers
 === Section 3: Intelligent applications
 
 * **LLM endpoint** — Hosted on the Red Hat Demo Platform's LiteMaaS instance[https://litellm-prod-frontend.apps.maas.redhatworkshops.io/models]. In production, organizations can use Red Hat AI on-premises or any hosted model provider
 * **Apache Kafka** - Event streaming for business data (pre-existing in the demo environment)
+////
 
 == Access details
 
@@ -166,10 +167,13 @@ oc get secret openshift-gitops-cluster -n openshift-gitops -o jsonpath='{.data.a
 oc get secret vault-token -n vault -o jsonpath='{.data.token}' | base64 -d
 ----
 
+////
+Section 3 hidden — re-enable by removing the //// markers
 === LLM endpoint (Section 3)
 
 * API base URL: {llm_endpoint_url}[{llm_endpoint_url}^]
 * API key: {llm_api_key}
+////
 
 == Demo application
 
@@ -183,8 +187,6 @@ In section 1 (foundational), the application has two environments:
 The Tekton pipeline and build resources are in the `{parasol_build_ns}` namespace.
 
 In Section 2, the application and all its components are registered in the Red Hat Developer Hub catalog as a "system" with linked components (frontend, backend, Kafka, database). They land in parasol-insurance-secured-dev and parasol-insurance-secured-prod namespaces, with a secure build pipeline that includes ACS, TAS, and Tekton Chains but you don't necessarily need to visit these namespaces, as RHDH acts as the 'single pane of glass', for visualizing topologies, pipelines, argo apps, and more.
-
-In Section 3, the application is extended with an AI-enhanced component that consumes the LLM endpoint and processes business data from Kafka.
 
 == Pre-demo checklist
 
@@ -239,6 +241,8 @@ oc get secret vault-token -n vault -o jsonpath='\{.data.token}' | base64 -d
 . Open TPA at {tpa_url}[{tpa_url}^] — the *SBOMs* tab will be empty at this point, which is expected since no pipelines have run yet. Instead, check the *Vulnerabilities* tab to confirm vulnerability data has been downloaded, and the *Importers* tab to confirm the `osv-github` importer is running (> 0% progress)
 . Open GitLab at {gitlab_url}[{gitlab_url}^] and log in as `{dev_user}` / `{password}` — confirm repository access
 
+////
+Section 3 hidden — re-enable by removing the //// markers
 === Section 3 (in addition to Sections 1-2)
 
 . Verify the LLM endpoint is serving by running the following command in the OpenShift console terminal (if your code assistant in DevSpaces worked above, you can skip this):
@@ -249,8 +253,4 @@ curl -s -H "Authorization: Bearer {llm_api_key}" {llm_endpoint_url}/models | jq 
 ----
 +
 You should see a JSON object with a list of available models if the LLM endpoint is working correctly.
-
-[TIP]
-====
-**Presenter tip:** Open all the URLs in separate browser tabs before starting. This avoids waiting for pages to load during the live demo. Retrieve all passwords (SonarQube, Argo CD, Vault) ahead of time and keep them in a text file. For Section 2, consider pre-loading the pipeline view. For Section 3, verify the LLM endpoint is responding before starting.
-====
+////
