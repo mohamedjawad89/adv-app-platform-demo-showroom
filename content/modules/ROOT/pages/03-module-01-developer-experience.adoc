@@ -40,7 +40,7 @@ oc new-project {nodejs_demo_ns}
 
 . Enter the repository URL:
 +
-[source,text,role="copypaste"]
+[source,text,role="copypaste",subs="attributes+"]
 ----
 {nodejs_app_repo}
 ----
@@ -101,7 +101,7 @@ S2I separates application code from container build authoring. Red Hat ships har
 
 . Enter the same repository URL:
 +
-[source,text,role="copypaste"]
+[source,text,role="copypaste",subs="attributes+"]
 ----
 {nodejs_app_repo}
 ----
