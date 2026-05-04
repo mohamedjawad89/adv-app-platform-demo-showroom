@@ -22,11 +22,7 @@ TPA provides a single pane of glass for all SBOM data across the organization. W
 
 === Show
 
-**What I say:**
-
-"Every image that comes out of our pipeline has an SBOM -- a complete inventory of every software component inside it. But an SBOM sitting in a registry is not useful unless you can query it. That is what the Trusted Profile Analyzer does."
-
-**What I do:**
+**Steps:**
 
 . Open **TPA** at {tpa_url}[{tpa_url}^]
 
@@ -103,7 +99,7 @@ image::tpa-sbom-search-by-license.png[link=self,window=blank,width=600,title="SB
 
 
 
-**What they should notice:**
+**What to notice:**
 
 * SBOMs are generated automatically by the pipeline and registered in TPA without manual steps
 * TPA provides a searchable inventory of every software component across all applications
@@ -111,7 +107,7 @@ image::tpa-sbom-search-by-license.png[link=self,window=blank,width=600,title="SB
 * License compliance data is available for every component
 * This is continuous compliance, not point-in-time audit evidence
 
-**Business value callout:**
+**Business value:**
 
 "When the next Log4Shell happens, Parasol's security team will not spend weeks figuring out which applications are affected. They will search TPA and know in seconds. Every application, every version, every dependency. And because SBOMs are generated for every build, this data is always current."
 
@@ -136,11 +132,7 @@ The OpenShift topology view automatically shows the running application componen
 
 === Show
 
-**What I say:**
-
-"Let me bring this all together. We have explored the catalog, provisioned a development environment, scanned dependencies, built a trusted artifact, managed secrets securely, and tracked everything in TPA. Now let me show you what the complete system looks like in production."
-
-**What I do:**
+**Steps:**
 
 . Open the **OpenShift web console** at {console_url}[{console_url}^]
 
@@ -158,14 +150,14 @@ The OpenShift topology view automatically shows the running application componen
 // TODO: Add screenshot of OpenShift topology showing parasol-insurance-secured-prod
 image::ocp-topology-secured-prod.png[OpenShift Topology view showing the Parasol Insurance application components in the secured production namespace,link=self,window=blank,align="center",width=700,title="Production topology: the complete Parasol system"]
 
-**What they should notice:**
+**What to notice:**
 
 * The production namespace shows the latest version deployed through the trusted pipeline
 * All components are visible with their relationships and health status
 * This is a live view that updates automatically
 * The complete trust chain is intact: from catalog to code to signed image to production
 
-**Business value callout:**
+**Business value:**
 
 "At Parasol, understanding the production landscape requires asking people and navigating multiple tools. With the OpenShift topology, the answer is one click away. And every component running here went through the same trusted pipeline with scanning, signing, and attestation."
 

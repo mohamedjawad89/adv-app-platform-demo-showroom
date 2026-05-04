@@ -36,15 +36,7 @@ The application platform makes AI integration a standard development activity, n
 
 === Show
 
-**What I say:**
-
-"Parasol's applications are running smoothly. The CI/CD pipeline is automated, the supply chain is trusted, and the platform handles operations. Now the CIO has a new mandate: use AI to solve a real business problem.
-
-Right now, the Parasol application has an Inbox screen where incoming customer emails are processed. The current system uses keyword matching to route them -- if the email mentions 'accident' or 'damage,' it goes to Claims. If the sender is a known customer, it goes to Retention. But many emails are ambiguous -- they describe situations without using the right keywords. Those end up in a 'Review Required' bucket, and claims administrators have to manually triage every one of them.
-
-An LLM is already available as an API endpoint, managed as a platform service. The developer does not need to deploy a model or manage infrastructure. The question is: how do they integrate it into the existing application using the same platform patterns?"
-
-**What I do:**
+**Steps:**
 
 . Open the running **Parasol application** (from the existing deployment):
 * Navigate to the **Inbox** tab on the left side of the application
@@ -55,7 +47,7 @@ An LLM is already available as an API endpoint, managed as a platform service. T
 
 image::parasol-inbox-review-required.png[Parasol Insurance Inbox screen showing incoming emails with several marked as REVIEW REQUIRED alongside CLAIMS and RETENTION classifications,link=self,window=blank,align="center",width=700,title="Inbox with Review Required emails that need manual triage"]
 
-**Business value callout:**
+**Business value:**
 
 "Manual email triage costs Parasol significant staff hours across their claims organization. An AI-powered routing service can evaluate and route emails in seconds with full context understanding, freeing claims administrators to focus on high-value work like complex claims resolution."
 
@@ -88,11 +80,7 @@ The platform engineer has already configured the LLM endpoint and Kafka credenti
 
 === Show
 
-**What I say:**
-
-"Another developer has been tasked with replacing the keyword matching with LLM-powered classification. Let me show you how they do this using the same platform patterns we have been demonstrating."
-
-**What I do:**
+**Steps:**
 
 . Open a **different browser** (e.g., Firefox or Safari if you have been using Chrome) and navigate to **Developer Hub** at {rhdh_url}[{rhdh_url}^]. Log in as `{dev2_user}` / `{password}`.
 +
@@ -165,7 +153,7 @@ image::scm-commit.png[SCM Commit pricess,link=self,window=blank,align="center",w
 +
 * "The developer pushes the LLM integration to their feature branch. The secure pipeline starts automatically, just like in Module 5."
 
-**What they should notice:**
+**What to notice:**
 
 * A new developer provisioned a development environment through Developer Hub self-service in seconds
 * The LLM endpoint and Kafka credentials were pre-configured by the platform engineer as environment variables
@@ -174,7 +162,7 @@ image::scm-commit.png[SCM Commit pricess,link=self,window=blank,align="center",w
 * Keyword matching is kept as a fallback for resilience
 * The same push-and-pipeline workflow applies -- AI integration is not a special case
 
-**Business value callout:**
+**Business value:**
 
 "What you just saw is AI integration following the exact same development workflow. A new developer logged in, provisioned a development environment through self-service, and was productive in minutes. They did not need to configure API keys or use any special tools. The platform engineer pre-configured the LLM endpoint through external secrets (which we saw in Module 5), and the developer implemented the feature using a standard Quarkus extension. One new file, one modified file, and a git push. That is how the platform makes AI a standard part of development."
 
@@ -199,11 +187,7 @@ The AI-enhanced email routing is deployed through the same trusted pipeline as e
 
 === Show
 
-**What I say:**
-
-"The pipeline is running on the AI-enhanced code. Let's watch it complete and then see the results in the application."
-
-**What I do:**
+**Steps:**
 
 . Show the pipeline completing in **Developer Hub** or the **OpenShift console**:
 * The same secure pipeline stages: Clone, Sonarqube SAST, ACS scan, Build and Push, Tekton Chains signing and attestation
@@ -246,7 +230,7 @@ So there are two manual gates: the code MR approval + tag creation, and the GitO
 
 The developer's sandbox pipeline (in their namespace) is separate — it only builds and deploys to the developer's own namespace. It doesn't touch the prod promotion path at all. The promotion path only activates when code lands on main and gets tagged.
 
-**What they should notice:**
+**What to notice:**
 
 * The AI-enhanced code went through the same secure pipeline as every other change
 * The "Review Required" bucket is completely eliminated -- every email is classified
@@ -255,7 +239,7 @@ The developer's sandbox pipeline (in their namespace) is separate — it only bu
 * The same platform patterns (Developer Hub, DevSpaces, pipelines, GitOps) applied to the AI feature
 * A new developer was productive in minutes using self-service provisioning -- no special AI tooling required
 
-**Business value callout:**
+**Business value:**
 
 "Let me recap what just happened. A new developer received a task to add AI-powered email routing. They logged into Developer Hub, provisioned a development environment through self-service, pulled in the LLM integration code from a prepared branch, reviewed it, and pushed it through the secure pipeline. The platform handled everything else: the LLM credentials came from Vault, the pipeline scanned and signed the image, and Argo CD deployed it. The result? The 'Review Required' bucket is gone. Every email gets an intelligent classification with a clear explanation. Manual triage costs just dropped to near zero. And it went through the exact same security and compliance controls as every other component."
 

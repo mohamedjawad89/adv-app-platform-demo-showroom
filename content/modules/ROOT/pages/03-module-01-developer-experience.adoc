@@ -21,11 +21,7 @@ OpenShift Build executes container builds inside the cluster, governed by the pl
 
 === Show
 
-**What I say:**
-
-"To set the stage, let's deploy a sample Node.js app using OpenShift's built-in Docker-strategy build. This is one of two foundational ways the platform takes a Git repo and turns it into a running application. We will use a public sample repo so we can focus on the platform mechanics."
-
-**What I do:**
+**Steps:**
 
 . Open the **OpenShift web console** at {console_url}[{console_url}^] and log in as `{dev_user}` / `{password}`
 
@@ -68,13 +64,13 @@ oc new-project {nodejs_demo_ns}
 
 . Open the route on the Topology view and confirm the Node.js REST endpoint responds
 
-**What they should notice:**
+**What to notice:**
 
 * The audience went from a Git URL to a running container in a single form, with no external CI
 * The build executed inside the cluster, producing in-cluster artifacts (BuildConfig, ImageStream, image in the registry)
 * No image was pre-built, no Dockerfile rebuild on a workstation, and no separate image push step required
 
-**Business value callout:**
+**Business value:**
 
 "Every container build is governed by the platform, every image lives in the in-cluster registry with a stable ImageStream reference, and every deployment is traceable to a specific BuildConfig and source revision. This is the foundational deployment path before any pipelines are layered on top."
 
@@ -99,11 +95,7 @@ S2I separates application code from container build authoring. Red Hat ships har
 
 === Show
 
-**What I say:**
-
-"Now let's deploy the same Node.js sample using Source-to-Image. We don't need a Dockerfile this time — the platform picks a Red Hat-supported Node.js builder image automatically and layers the application on top."
-
-**What I do:**
+**Steps:**
 
 . In the **OpenShift web console** Developer perspective, in the `{nodejs_demo_ns}` project, click **+Add** and select **Import from Git** again
 
@@ -142,14 +134,14 @@ oc delete project {nodejs_demo_ns}
 +
 * "One command tears down everything the two scenarios created. The remaining modules use the Parasol application namespaces, not this sandbox."
 
-**What they should notice:**
+**What to notice:**
 
 * The audience deployed the **same source repo** twice with two different strategies, side by side
 * S2I needed no Dockerfile and no container build expertise from the developer
 * Both deployments produce identical platform artifacts (BuildConfig, ImageStream, Deployment, Service, Route) — only the build strategy differs
 * Red Hat builder images are versioned, supported, and updated centrally
 
-**Business value callout:**
+**Business value:**
 
 "S2I lets application teams ship to OpenShift without becoming container experts. Builder images are maintained by Red Hat — they get the security patches, the runtime updates, and the base-image hardening for free. Combined with the Docker strategy from Part 1, the platform supports any team's deployment style: bring your own Dockerfile, or hand the platform your source code."
 
@@ -182,11 +174,7 @@ Cloud-based development environments eliminate local setup entirely. Every devel
 
 === Show
 
-**What I say:**
-
-"Now let me introduce you to our new developer. They have just joined the Parasol team and need to start working on the insurance application. Traditionally, their first 1-2 weeks would be spent setting up a local development environment: installing the right Java version, configuring the IDE, connecting to databases, getting the build to work. Let me show you how we eliminate that entirely."
-
-**What I do:**
+**Steps:**
 
 . Open the **OpenShift web console** at {console_url}[{console_url}^] and log in as `{dev_user}` / `{password}`
 
@@ -239,7 +227,7 @@ image::devspaces-workspace-loaded.png[Cloud development workspace with the Paras
 * Highlight that this file lives in the repository, so it is versioned and reviewed like any other code
 
 
-**What they should notice:**
+**What to notice:**
 
 * The developer clicked a single icon on the running application and landed in a fully configured IDE
 * The first launch requires a few authorization prompts (OpenShift access, GitLab OAuth, trust dialogs), but subsequent launches skip directly to the IDE
@@ -249,7 +237,7 @@ image::devspaces-workspace-loaded.png[Cloud development workspace with the Paras
 * Everything runs in the cloud, nothing on the developer's local machine
 * The devfile is part of the application repository, versioned alongside the code
 
-**Business value callout:**
+**Business value:**
 
 "What used to take Parasol developers 1-2 weeks just happened in under 2 minutes. The developer clicked one button on the running application and got a fully configured workspace. Every single developer gets the exact same environment, eliminating 'works on my machine' issues entirely. Platform engineers define the workspace once in the devfile, and it becomes the golden path for the entire team."
 
@@ -282,11 +270,7 @@ Quarkus dev mode provides live reload and continuous testing capabilities that r
 
 === Show
 
-**What I say:**
-
-"Our new developer has their workspace ready. Before diving into code, let me first start the application so we can see what we are working with. Then the developer will add a claims statistics API endpoint, and you will see how fast the inner loop is with Quarkus dev mode."
-
-**What I do:**
+**Steps:**
 
 . In the DevSpaces workspace, start the application in development mode:
 * Press kbd:[CTRL+SHIFT+P] (or kbd:[CMD+SHIFT+P] on Mac) to open the command palette
@@ -374,14 +358,14 @@ image::parasol-claims-stats-devmode.png[Browser showing the /api/claims/stats en
 
 image::quarkus-dev-mode-live-reload.png[Development mode terminal showing live reload with instant feedback on code changes,link=self,window=blank,align="center",width=700,title="Quarkus dev mode with live reload"]
 
-**What they should notice:**
+**What to notice:**
 
 * Code changes are reflected in seconds, not minutes
 * No manual build, package, or deploy steps in the inner loop
 * The developer stays in flow state, never leaving the IDE
 * The code works but contains code smells: `System.out.println` instead of proper logging and an empty catch block (this is intentional and sets up Module 2)
 
-**Business value callout:**
+**Business value:**
 
 "That code change was reflected in under 3 seconds. At Parasol's current pace, developers wait 20-30 minutes per iteration. Multiply that across 200 developers making 10 changes a day, and you are talking about thousands of hours recovered every month. Quarkus dev mode keeps developers in flow state and dramatically accelerates feature delivery."
 
@@ -412,11 +396,7 @@ DevSpaces gives platform engineers centralized control over developer environmen
 
 === Show
 
-**What I say:**
-
-"We have seen the developer's experience: click one button and get a fully configured workspace. But someone has to define and maintain that experience. Let me show you how the platform engineer manages DevSpaces for the organization."
-
-**What I do:**
+**Steps:**
 
 . Open the **Devfile Registry** at https://registry.devfile.io/viewer[https://registry.devfile.io/viewer^] in a browser tab:
 * Show the catalog of community and Red Hat-maintained devfile stacks
@@ -500,7 +480,7 @@ This workspace takes several minutes to start as it downloads open-source AI mod
 * Once the workspace opens, show that the Continue AI assistant extension is pre-configured to use the local Ollama models
 * "A developer can now get AI-assisted coding — code generation, documentation, analysis — all running privately within the cluster. The platform engineer published this as a one-click sample, and any developer on the team can spin it up."
 
-**What they should notice:**
+**What to notice:**
 
 * The devfile registry provides a curated catalog of starting points. Platform engineers do not build devfiles from scratch.
 * The DevSpaces operator gives centralized control over workspace policies through a Kubernetes custom resource
@@ -508,7 +488,7 @@ This workspace takes several minutes to start as it downloads open-source AI mod
 * Resource governance (CPU, memory, storage, idle timeout) prevents workspace sprawl
 * Custom workspace samples can be published with a single ConfigMap, giving developers curated starting points for specific use cases
 
-**Business value callout:**
+**Business value:**
 
 "The platform engineer defines the golden path once: choose a devfile stack from the registry, customize it for the organization, and configure workspace policies through the operator. Every developer gets the same governed environment automatically. No more 20-30 support tickets per week for environment issues. No more security blind spots from unmanaged developer workstations."
 

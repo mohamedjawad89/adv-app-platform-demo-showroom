@@ -22,11 +22,7 @@ Tekton pipelines automate the entire CI process, triggered by a simple git push.
 
 === Show
 
-**What I say:**
-
-"Our developer is happy with the claims statistics endpoint they added in Module 1. They tested it locally with Quarkus dev mode and it works. Now they are going to push the code. Watch what happens next. The developer does not need to file a ticket, notify a build engineer, or trigger anything manually. The platform handles it."
-
-**What I do:**
+**Steps:**
 
 . In **DevSpaces**, use the **Source Control** view in the left sidebar:
 * Click the **Source Control** icon (branch icon) in the activity bar
@@ -56,14 +52,14 @@ image::ocp-pipeline-running.png[OpenShift web console Pipelines view showing a T
 . Point out that the pipeline is still running:
 * "Let's watch this for a moment. Remember those code shortcuts our developer took? In Part 2, we will see what happens when the pipeline reaches the Sonarqube SAST stage."
 
-**What they should notice:**
+**What to notice:**
 
 * The developer only did a git push. No manual pipeline trigger, no tickets, no handoffs.
 * The pipeline started automatically within seconds of the push
 * Every stage is visible in the OpenShift web console. The developer can track progress in real time.
 * The same pipeline runs for every code change from every developer. Consistency is enforced by the platform.
 
-**Business value callout:**
+**Business value:**
 
 "At Parasol today, getting code from a developer's machine into a running environment takes 3-5 days of manual handoffs. What you just saw happened in seconds. The developer pushed code and the platform immediately started building, testing, and scanning it. No tickets, no waiting, no human bottleneck."
 
@@ -89,11 +85,7 @@ Automated quality gates in the pipeline catch code smells that manual processes 
 
 === Show
 
-**What I say:**
-
-"Remember, our developer added the claims statistics endpoint and it works. But they took a couple of shortcuts: they used `System.out.println` for logging instead of a proper logging framework, and they wrapped everything in a try-catch block with an empty catch — silently swallowing any exceptions. Let's see what the platform has to say about that."
-
-**What I do:**
+**Steps:**
 
 . In the **OpenShift web console**, show the pipeline run reaching the **Sonarqube SAST** stage:
 * The stage turns red (failed status)
@@ -229,7 +221,7 @@ image::devspaces-scm-commit-push.png[DevSpaces Source Control view showing stage
 
 image::ocp-pipeline-passed.png[OpenShift web console showing all pipeline stages passing after the developer fixed the code smells,link=self,window=blank,align="center",width=700,title="Pipeline passes after fixing code smells"]
 
-**What they should notice:**
+**What to notice:**
 
 * The platform caught the code smells automatically. No human reviewer needed to flag them.
 * The Sonarqube report URL was available directly in the pipeline log
@@ -239,7 +231,7 @@ image::ocp-pipeline-passed.png[OpenShift web console showing all pipeline stages
 * The fix followed the same workflow: AI-assisted code change, commit and push from the IDE, automatic pipeline run
 * The second pipeline run passed all stages, including the previously failed quality gate
 
-**Business value callout:**
+**Business value:**
 
 "This is the platform's guardrail and AI assistance working together. At Parasol, code smells like these accumulate across hundreds of developers and thousands of commits. Each one seems minor, but together they create a codebase that is difficult to debug, difficult to maintain, and prone to silent failures. The platform caught the problems automatically, and the AI fixed them in seconds. The developer did not need to look up the Quarkus logging API or research exception handling best practices. The platform enforced the standard, the AI resolved it, and the code is now production-ready."
 
@@ -272,11 +264,7 @@ GitOps with Argo CD makes Git the single source of truth for deployments. Every 
 
 === Show
 
-**What I say:**
-
-"The pipeline passed. The image is built, tested, scanned, and pushed to the registry. Now what? At Parasol today, this is where the developer files a deployment ticket and waits 3-5 days. With GitOps, the deployment happens automatically. Let me show you."
-
-**What I do:**
+**Steps:**
 
 . Open the **Argo CD console** (rhdh-gitops instance) at {argocd_url}[{argocd_url}^]:
 * Log in as `admin`. Retrieve the password using one of these methods:
@@ -323,7 +311,7 @@ image::parasol-claim-stats-live.png[Parasol Insurance application showing the cl
 
 image::argocd-promote.png[Argo promotion,link=self,window=blank,align="center",width=700,title="New production app being rolled out in the Parasol production environment"]
 
-**What they should notice:**
+**What to notice:**
 
 * The deployment happened automatically after the pipeline passed. No tickets, no manual steps.
 * Argo CD provides a visual resource tree showing the entire application stack and its health
@@ -331,7 +319,7 @@ image::argocd-promote.png[Argo promotion,link=self,window=blank,align="center",w
 * The claims statistics endpoint that was added in Module 1, caught by the pipeline for code smells in Part 2, and fixed by the developer is now live in the production environment, demonstrating the full inner loop to outer loop journey.
 * The entire journey from code change to production deployment happened in a single demo session
 
-**Business value callout:**
+**Business value:**
 
 "Let me recap the journey. In Module 1, a developer added a claims statistics endpoint in minutes using DevSpaces and Quarkus dev mode. They pushed the code, and the platform's CI/CD pipeline caught code smells — improper logging and an empty catch block. The developer fixed both issues in minutes, pushed again, and the pipeline passed. Argo CD deployed the change automatically through GitOps. What used to take Parasol 3-5 days of manual handoffs, tickets, and approvals just happened in minutes, with zero human bottlenecks and full quality enforcement."
 

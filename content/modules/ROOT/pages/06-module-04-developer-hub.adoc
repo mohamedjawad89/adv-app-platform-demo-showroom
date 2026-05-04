@@ -28,11 +28,7 @@ Developer Hub provides a centralized, searchable catalog of all applications, co
 
 === Show
 
-**What I say:**
-
-"Time has passed since Section 1. Parasol has adopted platform engineering practices and implemented an Internal Developer Platform with Red Hat Developer Hub. This is the single pane of glass for developers -- software catalog, self-service templates, CI/CD visibility, and now AI-assisted development. Let me show you what this looks like."
-
-**What I do:**
+**Steps:**
 
 . Open **Red Hat Developer Hub** at {rhdh_url}[{rhdh_url}^] and log in as `{dev_user}` / `{password}`
 
@@ -72,7 +68,7 @@ LLMs are non-deterministic — responses vary between attempts. The demo environ
 +
 image::rhdh-lightspeed-api-query.png[Developer Lightspeed answering a question about the parasol-insurance-api with catalog data and a generated Java code snippet,link=self,window=blank,align="center",width=700,title="Developer Lightspeed: AI-powered answers grounded in the software catalog"]
 
-**What they should notice:**
+**What to notice:**
 
 * Developer Lightspeed is integrated directly into the IDP, not the IDE
 * It combines product docs, developer docs, and the software catalog for contextual answers
@@ -80,7 +76,7 @@ image::rhdh-lightspeed-api-query.png[Developer Lightspeed answering a question a
 * The platform engineer configured the AI model -- developers get assistance within governance guardrails
 * This reduces onboarding friction and eliminates the need to interrupt teammates for project context
 
-**Business value callout:**
+**Business value:**
 
 "At Parasol, onboarding a new developer to the application landscape takes weeks of knowledge transfer. With Developer Lightspeed, a developer can ask natural language questions about any project in the catalog and get answers grounded in real documentation and catalog data. That weeks-long knowledge transfer becomes self-service in seconds."
 
@@ -106,11 +102,7 @@ RHDH provides a centralized, searchable catalog of all applications, components,
 
 === Show
 
-**What I say:**
-
-"Now let me show you the software catalog that powers those Lightspeed answers. This is where the Parasol application and all its components are registered."
-
-**What I do:**
+**Steps:**
 
 . Navigate to the **Catalog** in the left sidebar:
 * Use the *Kind* dropdown to filter for *System* entities.
@@ -132,7 +124,7 @@ image::rhdh-catalog-parasol-system.png[Red Hat Developer Hub catalog showing the
 +
 image::rhdh-catalog-parasol-api.png[Red Hat Developer Hub catalog showing the Parasol API,link=self,window=blank,align="center",width=700,title="Parasol API in the Developer Hub catalog"]
 
-**What they should notice:**
+**What to notice:**
 
 * The catalog provides a complete, structured view of the application landscape
 * Components are linked together with explicit relationships (depends-on, provides, consumes)
@@ -140,7 +132,7 @@ image::rhdh-catalog-parasol-api.png[Red Hat Developer Hub catalog showing the Pa
 * APIs are discoverable through the catalog with their definitions
 * No tickets, no asking teammates, no searching through scattered tools
 
-**Business value callout:**
+**Business value:**
 
 "The catalog is the foundation for everything in Developer Hub. It powers the Lightspeed AI answers we just saw, it drives the self-service templates we are about to see, and it provides the single source of truth for the entire application landscape."
 
@@ -167,11 +159,7 @@ RHDH templates provide golden path self-service for developers. The "Parasol Ins
 
 === Show
 
-**What I say:**
-
-"The catalog solves discovery. Now let me show you self-service. Our developer needs a production-like environment to work on and verify a new feature for the Parasol application. Traditionally, this means filing tickets and waiting days. Let me show you how that self-service with an IDP changes that."
-
-**What I do:**
+**Steps:**
 
 . In **Developer Hub**, click the **+** (plus) button at the top of the page to access software templates
 
@@ -199,7 +187,7 @@ image::rhdh-template-results.png[Developer Hub template provisioning results sho
 * Show that DevSpaces opens to the correct feature branch automatically (far lower left branch name)
 * "The developer clicked one link and landed in a cloud workspace on their feature branch. Same DevSpaces experience from Section 1, but now provisioned through the IDP's self-service template."
 
-**What they should notice:**
+**What to notice:**
 
 * The developer clicked the **+** button at the top to access templates
 * Only one field to fill in: the branch name. Everything else is handled by the template.
@@ -208,7 +196,7 @@ image::rhdh-template-results.png[Developer Hub template provisioning results sho
 * The developer opened DevSpaces directly from the template output on the correct branch
 * No tickets, no waiting, no IT bottleneck
 
-**Business value callout:**
+**Business value:**
 
 "What used to take Parasol a week -- filing tickets for a namespace, waiting for IT to provision it, setting up the pipeline, configuring the branch -- just happened in seconds with one field. The developer typed a branch name and got a fully provisioned development environment. No tickets, no waiting, no bottleneck."
 

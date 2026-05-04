@@ -34,11 +34,7 @@ The Dependency Analytics plugin in DevSpaces scans project dependencies in real-
 
 === Show
 
-**What I say:**
-
-"Our developer has their feature branch open in DevSpaces from Module 4. Before they start writing business logic, let's look at what the Dependency Analytics plugin is already telling them about the project's dependencies."
-
-**What I do:**
+**Steps:**
 
 . In the **DevSpaces** workspace (continuing from Module 4), open the project's dependency file:
 * Open `pom.xml`
@@ -66,7 +62,7 @@ image::devspaces-dependency-analytics-report.png[DevSpaces IDE showing Dependenc
 * "The rest of the dependencies are clean. The developer has confidence that their project's dependency tree is healthy before they even commit."
 
 
-**What they should notice:**
+**What to notice:**
 
 * Dependency scanning happens in real time, directly in the IDE. No separate tool, no pipeline wait.
 * The report identified an incompatible dependency that could cause runtime issues
@@ -74,7 +70,7 @@ image::devspaces-dependency-analytics-report.png[DevSpaces IDE showing Dependenc
 * The developer fixed the issue before committing, avoiding pipeline failure and context switching
 * This is "shift left" in action: dependency hygiene at the earliest possible point
 
-**Business value callout:**
+**Business value:**
 
 "At Parasol, dependency issues are only caught during pipeline scans, days after the developer wrote the code. By then, the developer has moved on to other work and has to context-switch back to fix it. Dependency Analytics catches the issue in real time, while the developer is actively working on the file. The fix takes seconds instead of hours."
 
@@ -109,11 +105,7 @@ Security teams have access to a complete audit trail, including what went in to 
 
 === Show
 
-**What I say:**
-
-"The developer has cleaned up the dependency issue and is ready to push their code. Watch what happens when they push to their feature branch. The secure pipeline runs automatically, and the developer can watch everything from Developer Hub."
-
-**What I do:**
+**Steps:**
 
 . In **DevSpaces**, commit and push the changes using the **Source Control** view:
 * Stage the modified `pom.xml`
@@ -241,7 +233,7 @@ image::pipeline-conforma-report.png[The conforma report showing policy evaluatio
 
 // TODO: Add screenshot showing the production promotion in Argo CD
 
-**What they should notice:**
+**What to notice:**
 
 * The pipeline ran against the feature branch automatically on push
 * The developer watched both the pipeline and Argo CD sync from Developer Hub -- single pane of glass
@@ -250,7 +242,7 @@ image::pipeline-conforma-report.png[The conforma report showing policy evaluatio
 * The platform engineer reviewed, approved, and created a release tag for production
 * The release tag pipeline also validated image signatures and SLSA compliance
 
-**Business value callout:**
+**Business value:**
 
 "Every artifact that comes out of this pipeline has a cryptographic signature proving it is genuine, an SBOM listing every component inside it, and a SLSA attestation proving how it was built. And the developer saw the entire process from Developer Hub without switching between tools. That is what a trusted software supply chain looks like."
 

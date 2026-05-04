@@ -22,11 +22,7 @@ Service Mesh provides traffic management, mTLS encryption, and fine-grained acce
 
 === Show
 
-**What I say:**
-
-"The application is deployed, the pipeline is automated, and GitOps handles delivery. But there is a whole class of operational concerns that every application needs: encryption between services, traffic management, access control. Traditionally, developers have to build these into their application code. With Service Mesh, the platform handles them automatically."
-
-**What I do:**
+**Steps:**
 
 . Open the **OpenShift web console** at {console_url}[{console_url}^] and log in as `{pe_user}` / `{password}` (platform engineer persona)
 
@@ -57,7 +53,7 @@ This part is for illustration only. Do not actually create or edit the policy â€
 
 image::ossm-console-overview.png[OpenShift Service Mesh console showing the Parasol application namespace with service health indicators and mTLS status,link=self,window=blank,align="center",width=700,title="Service Mesh console: namespace overview"]
 
-**What they should notice:**
+**What to notice:**
 
 * Service Mesh is integrated into the OpenShift console. No separate tool required.
 * mTLS encryption is automatic. The developers did not write any TLS code.
@@ -65,7 +61,7 @@ image::ossm-console-overview.png[OpenShift Service Mesh console showing the Para
 * Access policies enforce least privilege at the service level without application code changes.
 * All of these capabilities are configured by the platform team and apply consistently.
 
-**Business value callout:**
+**Business value:**
 
 "At Parasol today, service-to-service communication is unencrypted, and compliance audits flag it every quarter. Implementing mTLS in application code would require changes to every service, months of development work, and ongoing maintenance. The mesh handles it as a platform capability. The platform team enabled it once, and it applies to every service automatically. The compliance gap is closed without any developer effort."
 
@@ -91,11 +87,7 @@ The Service Mesh console provides an intuitive, real-time view of the entire ser
 
 === Show
 
-**What I say:**
-
-"Now let me show you the observability side. We have encryption and traffic management, but the platform engineer also needs to see what is happening. How is traffic flowing? Are there errors? Where are the bottlenecks? The Service Mesh console gives you all of that in real time."
-
-**What I do:**
+**Steps:**
 
 . **Generate traffic for the graph.** The traffic graph needs active traffic flowing between services to show useful data. Use the Web Terminal (click the `>_` icon at the top of the OpenShift Console) to run a load generator pod inside the cluster. Internal traffic flows through the waypoint proxy, which provides the HTTP-level metrics that Kiali displays. External traffic can be configured to also flow through the waypoint proxy if that is of interest.
 +
@@ -170,7 +162,7 @@ Stop and remove the generator when done:
 oc delete pod load-generator -n {parasol_prod_ns}
 ----
 
-**What they should notice:**
+**What to notice:**
 
 * The service graph provides immediate visual understanding of the application architecture and traffic patterns
 * Health is indicated through color coding. No need to check dashboards or parse logs to know if something is wrong.
@@ -180,7 +172,7 @@ oc delete pod load-generator -n {parasol_prod_ns}
 * Workload observability (CPU, memory, network) is built into the platform through the Observe menu
 * Dashboards are customizable and alerts can be configured to catch issues proactively
 
-**Business value callout:**
+**Business value:**
 
 "At Parasol, when a cross-service issue occurs, the operations team spends hours correlating logs across services to find the root cause. With the Service Mesh console, they can see the problem in seconds: which service is failing, what the error rate is, and how it affects downstream services. Add in the platform's built-in workload monitoring with customizable dashboards and proactive alerts, and you have a complete observability picture -- from individual service metrics to aggregate resource consumption. This reduces mean time to resolution from hours to minutes. And none of this required any changes to the application code. The platform provides it automatically."
 
@@ -211,11 +203,7 @@ OpenShift provides multiple autoscaling strategies out of the box:
 
 === Show
 
-**What I say:**
-
-"The last thing I want to show you is how the platform handles scaling automatically. In production, traffic is not constant. The platform engineer has already configured a HorizontalPodAutoscaler for the Parasol production deployment through the GitOps manifests. It scales between 2 and 5 replicas based on CPU utilization. Let me show you what happens when load increases."
-
-**What I do:**
+**Steps:**
 
 . In the **OpenShift web console**, navigate to the **Topology** view in the `{parasol_prod_ns}` namespace
 
@@ -264,13 +252,13 @@ oc delete pod load-generator -n {parasol_prod_ns}
 * "**Cluster Autoscaler and Machine Autoscaler** scale the cluster itself. If pods cannot be scheduled because the cluster is full, the platform automatically provisions new worker nodes. When demand drops, it removes them. The infrastructure grows and shrinks with demand."
 * "**KEDA, the event-driven autoscaler**, scales based on external event sources. For example, Parasol's email processing could scale based on the Kafka topic queue depth. If thousands of emails arrive at once, KEDA spins up more consumers to process them faster, then scales back to zero when the queue is empty."
 
-**What they should notice:**
+**What to notice:**
 
 * The platform automatically scaled the deployment in response to CPU load
 * Scaling down happens automatically when load decreases -- no manual intervention
 * Multiple autoscaling strategies exist for different use cases (horizontal, vertical, cluster, event-driven)
 
-**Business value callout:**
+**Business value:**
 
 "At Parasol, the operations team manually scales deployments when performance degrades -- a reactive process that adds 10-15 minutes of response time and impacts customer experience. With the HPA, the platform responds to demand changes in seconds, automatically. During peak hours, the application scales up. During off-peak hours, it scales back down, saving infrastructure costs. And with KEDA, event-driven workloads like email processing can scale based on queue depth, not just CPU. The platform handles it all automatically."
 
@@ -303,11 +291,7 @@ The External Secrets Operator integrates with HashiCorp Vault to provide central
 
 === Show
 
-**What I say:**
-
-"Before we wrap up Section 1, let me address a critical concern: secrets management. Our application needs database credentials, API keys, and other sensitive configuration. Where do those secrets come from, and how do we keep them secure?"
-
-**What I do:**
+**Steps:**
 
 . Visit the {vault_url}[**Vault** UI^] served by a Vault instance running in your cluster. Log in with the Vault token.
 +
@@ -361,7 +345,7 @@ spec:
 * "When the platform team rotates a secret in Vault, the External Secrets Operator syncs the new value automatically based on the refresh interval. No application restart required, no manual update. And every access to every secret is audited in Vault's audit log."
 
 
-**What they should notice:**
+**What to notice:**
 
 * Secrets are never stored in Git or hardcoded in application code
 * The ExternalSecret resource references a Vault path, not an actual value
@@ -369,7 +353,7 @@ spec:
 * Secret rotation is transparent to the application
 * Full audit trail for compliance
 
-**Business value callout:**
+**Business value:**
 
 "At Parasol, some teams store secrets in Git, others use Kubernetes secrets directly. Neither approach provides centralized management, rotation, or audit trails. With Vault and the External Secrets Operator, every secret is centrally managed, automatically rotated, and fully audited. The developer never sees the actual values, and compliance requirements are satisfied automatically."
 
