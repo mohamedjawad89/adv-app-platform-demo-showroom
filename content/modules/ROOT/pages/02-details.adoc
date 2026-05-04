@@ -47,7 +47,6 @@ Throughout the modules you'll work on applications belonging to a fictitious com
 === Section 1: Foundational application platform
 
 * **Red Hat OpenShift Container Platform** {ocp_version} - The foundational platform
-* **Migration Toolkit for Applications** {mta_version} - Application modernization and migration analysis (discussed in Module 1, not shown live)
 * **Red Hat OpenShift Dev Spaces** {devspaces_version} - Cloud development environments with AI code assistance
 * **Red Hat build of Quarkus** {quarkus_version} - Cloud native Java runtime (featured application)
 * **Red Hat OpenShift Pipelines** {pipelines_version} - Tekton-based CI/CD pipelines
@@ -177,7 +176,7 @@ Section 3 hidden — re-enable by removing the //// markers
 
 == Demo application
 
-The demo application is the **Parasol Insurance** web application, a Quarkus-based microservices application that handles policy management, claims processing, and customer interactions. Parasol migrated this application from a legacy Java EE platform to Quarkus on OpenShift using the Migration Toolkit for Applications (MTA).
+The demo application is the **Parasol Insurance** web application, a Quarkus-based microservices application that handles policy management, claims processing, and customer interactions.
 
 In section 1 (foundational), the application has two environments:
 

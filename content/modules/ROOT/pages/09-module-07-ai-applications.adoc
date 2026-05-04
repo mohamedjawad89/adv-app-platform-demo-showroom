@@ -275,7 +275,7 @@ In this module, you saw how the application platform extends naturally to AI-enh
 
 Across all three sections, you saw a complete application platform transformation:
 
-* **Section 1 (Foundational Application Platform)** -- Application modernization, standardized development environments, live reload development, automated CI/CD with quality enforcement and AI-assisted remediation, GitOps delivery, and platform operations with Service Mesh and observability
+* **Section 1 (Foundational Application Platform)** -- Foundational deployment paths (OpenShift Build and S2I), standardized development environments, live reload development, automated CI/CD with quality enforcement and AI-assisted remediation, GitOps delivery, and platform operations with Service Mesh and observability
 * **Section 2 (Advanced Application Platform)** -- Developer Hub for discovery and self-service with AI-powered Lightspeed, secure build pipeline with supply chain trust, and SBOM management for compliance
 * **Section 3 (Intelligent Applications)** -- AI-enhanced email routing built and deployed using the same golden path patterns, demonstrating that the platform scales from traditional to AI workloads seamlessly
 

@@ -4,10 +4,11 @@
 
 .Section 1: Foundational application platform
 * xref:03-module-01-developer-experience.adoc[Module 1: Developer experience]
-** xref:03-module-01-developer-experience.adoc#part-1[Part 1: Application modernization]
-** xref:03-module-01-developer-experience.adoc#part-2[Part 2: Standardized development with DevSpaces]
-** xref:03-module-01-developer-experience.adoc#part-3[Part 3: Adding a feature with Quarkus dev mode]
-** xref:03-module-01-developer-experience.adoc#part-4[Part 4: Managing DevSpaces environments]
+** xref:03-module-01-developer-experience.adoc#part-1[Part 1: Deploying with OpenShift Build]
+** xref:03-module-01-developer-experience.adoc#part-2[Part 2: Deploying with Source-to-Image (S2I)]
+** xref:03-module-01-developer-experience.adoc#part-3[Part 3: Standardized development with DevSpaces]
+** xref:03-module-01-developer-experience.adoc#part-4[Part 4: Adding a feature with Quarkus dev mode]
+** xref:03-module-01-developer-experience.adoc#part-5[Part 5: Managing DevSpaces environments]
 ** xref:03-module-01-developer-experience.adoc#summary[Module 1 summary]
 
 * xref:04-module-02-cicd-pipeline.adoc[Module 2: CI/CD pipeline]

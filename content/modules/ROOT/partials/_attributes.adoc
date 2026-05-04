@@ -50,7 +50,11 @@
 :servicemesh_version: 3.2
 :quarkus_version: 3.27
 :monitoring_version: 4.21
-:mta_version: 7.2
+// :mta_version: 7.2 — MTA context hidden from demo
+
+// Sample app used in Module 1 deployment scenarios (OpenShift Build + S2I)
+:nodejs_app_repo: https://github.com/nodeshift-starters/nodejs-rest-http
+:nodejs_demo_ns: nodejs-demo
 
 // Product versions — Section 2
 :rhdh_version: 1.8

@@ -3,62 +3,148 @@ include::partial$_attributes.adoc[]
 :imagesdir: ../assets/images
 
 [#part-1]
-== Part 1 — Setting the scene: Application modernization
+== Part 1 — Deploying a containerized app with OpenShift Build
 
 === Know
 
-_Before Parasol Insurance could modernize their development practices, they first had to modernize their application. Their core insurance platform was a monolithic Java EE application running on a traditional application server. The Migration Toolkit for Applications (MTA) helped them analyze, plan, and execute the migration to Quarkus on OpenShift._
+_Before we follow a developer through their inner loop, let's see how OpenShift handles application deployment as a platform capability. OpenShift Build runs container builds inside the cluster from a source repository. With the **Docker strategy**, the platform reads a Dockerfile (or Containerfile) from the repo, builds an image, pushes it to the internal registry, and tracks it with an `ImageStream`. No external CI system, no developer workstation builds, and no pre-built image registry needed — the platform handles everything from source to running container._
 
 **Business challenge:**
 
-* Legacy Java EE monolith is expensive to maintain and difficult to extend with new features
-* Traditional application server licensing costs are increasing year over year
-* Feature releases take months due to the complexity of the monolithic codebase
-* The monolith cannot take advantage of cloud native capabilities like auto-scaling and containerization
-* New developers need deep knowledge of legacy APIs and patterns before they can contribute
-
-**Current state at Parasol:**
-
-* The core insurance platform has been running on a traditional Java EE application server for over a decade
-* Feature releases take months due to the complexity of the monolithic codebase
-* Only a handful of senior developers understand the full application architecture
-* The application cannot run in containers without significant rework
+* Developers wait for centralized build infrastructure to take a Git repo to a running container
+* Container builds running on developer workstations create environment drift and inconsistent images
+* Image provenance is unclear without a controlled, in-cluster build process
 
 **Value proposition:**
 
-The Migration Toolkit for Applications (MTA) provides automated analysis of existing applications, identifying migration issues, estimating effort, and providing guided remediation steps. For Parasol, MTA analyzed their Java EE application and provided a clear path to modernize to Quarkus, a cloud native Java framework optimized for OpenShift. This migration is the foundation for everything we demonstrate in this demo: without a modernized, cloud native application, the developer experience improvements, automated pipelines, and platform operations capabilities would not be possible.
+OpenShift Build executes container builds inside the cluster, governed by the platform. Every build is reproducible, auditable, and produces an `ImageStream` that downstream deployments and pipelines can reference. The Docker strategy is the right fit when the application repo already provides a container build recipe (a `Dockerfile` or `Containerfile`).
 
 === Show
 
-[NOTE]
-====
-This section is context only — there is no live demo for the MTA migration. The application has already been migrated.
-====
-
 **What I say:**
 
-"Before we dive into the developer experience, let me set the stage. Parasol Insurance had a challenge that many of you probably recognize: a core business application built on legacy Java EE, running on a traditional application server. It worked, but it was expensive to maintain, slow to update, and could not take advantage of modern cloud native capabilities.
+"To set the stage, let's deploy a sample Node.js app using OpenShift's built-in Docker-strategy build. This is one of two foundational ways the platform takes a Git repo and turns it into a running application. We will use a public sample repo so we can focus on the platform mechanics."
 
-Parasol used the Migration Toolkit for Applications, or MTA, which is included with their OpenShift subscription, to analyze their application. MTA scanned the codebase and identified every Java EE API, every proprietary dependency, and every pattern that needed to change. It generated a detailed migration report with specific remediation steps, categorized by effort level.
+**What I do:**
 
-The key insight from MTA's analysis was that Parasol's application was a strong candidate for migration to Quarkus, Red Hat's cloud native Java framework. Quarkus is designed from the ground up for OpenShift and Kubernetes: fast startup times, low memory footprint, and a developer experience built around live reload and continuous testing.
+. Open the **OpenShift web console** at {console_url}[{console_url}^] and log in as `{dev_user}` / `{password}`
 
-Parasol completed this migration, and the application you are about to see running in this demo is the result. It is a modern Quarkus application, containerized, running on OpenShift, and ready to take advantage of every platform capability we are going to show you.
+. Switch to the **Developer** perspective and create a new project named `{nodejs_demo_ns}`:
+* Click the project dropdown at the top of the page and select **Create Project**
+* Enter `{nodejs_demo_ns}` as the name and click **Create**
 
-The important thing to understand is that this modernization step is the foundation. Without it, none of the developer experience improvements, automated pipelines, or platform operations capabilities we are about to demonstrate would be possible. MTA made that transition practical and de-risked."
+. Click **+Add** in the left sidebar and select **Import from Git**
+
+. Enter the repository URL:
++
+[source,text,role="copypaste"]
+----
+{nodejs_app_repo}
+----
+
+. Under **Import Strategy**, select **Dockerfile**:
+* The console scans the repo and confirms a `Dockerfile` is present
+* "OpenShift inspects the repo, finds the Dockerfile, and proposes a Docker-strategy build."
+
+. Set **Application name** to `nodejs-rest-http-docker` and **Name** to `nodejs-rest-http-docker`
+
+. Leave the default resource type (`Deployment`) and click **Create**
+
+. Watch the build complete in the **Topology** view:
+* The pod cycles through `Build → Push → Deploy → Running` (the blue donut fills as the build progresses)
+* "OpenShift just cloned the repo, built the image inside the cluster, pushed it to the internal registry, and rolled out a Deployment — all from a single form."
+
+. Inspect the platform-managed artifacts:
+.. Navigate to **Builds → BuildConfigs**, open `nodejs-rest-http-docker`, and show the `strategy.dockerStrategy` block in the YAML
+.. Navigate to **Builds → ImageStreams** and show the new ImageStream tracking the built image
+.. "These are platform-managed resources. The image lives in the in-cluster registry, the BuildConfig is the reusable recipe, and the ImageStream provides a stable reference for downstream consumers."
+
+. Open the route on the Topology view and confirm the Node.js REST endpoint responds
+
+**What they should notice:**
+
+* The audience went from a Git URL to a running container in a single form, with no external CI
+* The build executed inside the cluster, producing in-cluster artifacts (BuildConfig, ImageStream, image in the registry)
+* No image was pre-built, no Dockerfile rebuild on a workstation, and no separate image push step required
 
 **Business value callout:**
 
-"Application modernization is often the first and most critical step in an enterprise platform transformation. MTA reduces the risk and effort of migration by providing automated analysis and guided remediation. For Parasol, this unlocked the ability to adopt cloud native development practices, automated CI/CD, and platform-managed operations, all of which we will see in this demo."
+"Every container build is governed by the platform, every image lives in the in-cluster registry with a stable ImageStream reference, and every deployment is traceable to a specific BuildConfig and source revision. This is the foundational deployment path before any pipelines are layered on top."
 
 '''
 
 [#part-2]
-== Part 2 — Standardized development with DevSpaces
+== Part 2 — Deploying source code with Source-to-Image (S2I)
 
 === Know
 
-_With the Parasol application modernized to Quarkus, new developers still face a common challenge: setting up their development environment. Dependencies conflict, IDE configurations differ across teams, and "works on my machine" remains a constant source of friction. Red Hat OpenShift Dev Spaces eliminates this entirely._
+_Many applications do not provide their own Dockerfile. With **Source-to-Image (S2I)**, OpenShift detects the application's language, picks a Red Hat-maintained builder image, and produces a runnable container without the developer writing any container build configuration. The same `BuildConfig` + `ImageStream` artifacts result — only the build strategy changes._
+
+**Business challenge:**
+
+* Application teams without container expertise cannot ship to OpenShift on their own
+* Hand-maintained Dockerfiles drift from organizational base image and security standards
+* Onboarding a new application requires authoring and reviewing container build files
+
+**Value proposition:**
+
+S2I separates application code from container build authoring. Red Hat ships hardened, supported builder images for common runtimes (Node.js, Java, Python, .NET, Go, Ruby). The platform picks the right one, layers the application on top, and produces a consistent container — without any Dockerfile in the repo.
+
+=== Show
+
+**What I say:**
+
+"Now let's deploy the same Node.js sample using Source-to-Image. We don't need a Dockerfile this time — the platform picks a Red Hat-supported Node.js builder image automatically and layers the application on top."
+
+**What I do:**
+
+. In the **OpenShift web console** Developer perspective, in the `{nodejs_demo_ns}` project, click **+Add** and select **Import from Git** again
+
+. Enter the same repository URL:
++
+[source,text,role="copypaste"]
+----
+{nodejs_app_repo}
+----
+
+. Under **Import Strategy**, select **Builder Image**:
+* The console auto-detects Node.js as the language and proposes the Red Hat Node.js builder image
+* "OpenShift's S2I strategy recognized this as a Node.js project, picked the Red Hat-maintained Node.js builder image, and configured a Source-strategy BuildConfig — without us editing anything."
+
+. Set **Application name** to `nodejs-rest-http-s2i` and **Name** to `nodejs-rest-http-s2i`
+
+. Confirm the suggested **Builder Image version** (latest supported Node.js)
+
+. Leave the default resource type (`Deployment`) and click **Create**
+
+. Watch the build complete in the **Topology** view alongside the previous `nodejs-rest-http-docker` deployment
+
+. Inspect the resulting BuildConfig:
+.. Navigate to **Builds → BuildConfigs** and open `nodejs-rest-http-s2i`
+.. Show `strategy.sourceStrategy` referencing the Node.js builder image — contrast with the `dockerStrategy` from Part 1
+.. "Same source repo, same platform mechanics, different strategy. The Source strategy uses a Red Hat builder image; the Docker strategy uses the repo's own Dockerfile."
+
+. Open the route for the S2I-built app and confirm the same Node.js REST endpoint responds
+
+**What they should notice:**
+
+* The audience deployed the **same source repo** twice with two different strategies, side by side
+* S2I needed no Dockerfile and no container build expertise from the developer
+* Both deployments produce identical platform artifacts (BuildConfig, ImageStream, Deployment, Service, Route) — only the build strategy differs
+* Red Hat builder images are versioned, supported, and updated centrally
+
+**Business value callout:**
+
+"S2I lets application teams ship to OpenShift without becoming container experts. Builder images are maintained by Red Hat — they get the security patches, the runtime updates, and the base-image hardening for free. Combined with the Docker strategy from Part 1, the platform supports any team's deployment style: bring your own Dockerfile, or hand the platform your source code."
+
+'''
+
+[#part-3]
+== Part 3 — Standardized development with DevSpaces
+
+=== Know
+
+_Foundational deploy paths are in place — but daily developer work is more than one-shot deploys. New developers still face a common challenge: setting up their development environment. Dependencies conflict, IDE configurations differ across teams, and "works on my machine" remains a constant source of friction. Red Hat OpenShift Dev Spaces eliminates this entirely._
 
 **Business challenge:**
 
@@ -153,8 +239,8 @@ image::devspaces-workspace-loaded.png[Cloud development workspace with the Paras
 
 '''
 
-[#part-3]
-== Part 3 — Adding a feature with Quarkus dev mode
+[#part-4]
+== Part 4 — Adding a feature with Quarkus dev mode
 
 === Know
 
@@ -283,8 +369,8 @@ image::quarkus-dev-mode-live-reload.png[Development mode terminal showing live r
 
 "That code change was reflected in under 3 seconds. At Parasol's current pace, developers wait 20-30 minutes per iteration. Multiply that across 200 developers making 10 changes a day, and you are talking about thousands of hours recovered every month. Quarkus dev mode keeps developers in flow state and dramatically accelerates feature delivery."
 
-[#part-4]
-== Part 4 — Managing DevSpaces environments (platform engineer persona)
+[#part-5]
+== Part 5 — Managing DevSpaces environments (platform engineer persona)
 
 === Know
 
@@ -419,7 +505,7 @@ This workspace takes several minutes to start as it downloads open-source AI mod
 
 In this module, you saw how Parasol Insurance modernized their application and transformed both the developer and platform engineer experience:
 
-. **Application modernization** — MTA analyzed and guided the migration from legacy Java EE to Quarkus, unlocking cloud native capabilities and setting the foundation for everything that follows
+. **Foundational deployment paths** — OpenShift Build (Docker strategy) and Source-to-Image (S2I) showed two ways to take any source repository to a running container, governed entirely by the platform
 . **Cloud development environments** — DevSpaces eliminated 1-2 weeks of setup time, giving every developer an identical, pre-configured workspace defined by a devfile in the repository
 . **Live reload development** — Quarkus dev mode reduced the inner development loop from 20-30 minutes to seconds, keeping developers in flow state
 . **Platform engineer governance** — DevSpaces provides centralized control over developer environments through devfiles, resource quotas, and organizational policies
