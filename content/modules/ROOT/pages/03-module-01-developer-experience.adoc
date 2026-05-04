@@ -29,9 +29,16 @@ OpenShift Build executes container builds inside the cluster, governed by the pl
 
 . Open the **OpenShift web console** at {console_url}[{console_url}^] and log in as `{dev_user}` / `{password}`
 
-. Switch to the **Developer** perspective and create a new project named `{nodejs_demo_ns}`:
-* Click the project dropdown at the top of the page and select **Create Project**
-* Enter `{nodejs_demo_ns}` as the name and click **Create**
+. Open the **Web Terminal** by clicking the `>_` icon in the top navigation bar (accept the defaults if prompted) and create a new project for the deployment scenarios:
++
+[source,bash,role="copypaste",subs="attributes+"]
+----
+oc new-project {nodejs_demo_ns}
+----
++
+* "We'll use this project for both deployment scenarios. Creating it from the CLI is one command — same result as the web-console flow."
+
+. Switch to the **Developer** perspective and confirm `{nodejs_demo_ns}` is selected in the project dropdown
 
 . Click **+Add** in the left sidebar and select **Import from Git**
 
@@ -125,6 +132,15 @@ S2I separates application code from container build authoring. Red Hat ships har
 .. "Same source repo, same platform mechanics, different strategy. The Source strategy uses a Red Hat builder image; the Docker strategy uses the repo's own Dockerfile."
 
 . Open the route for the S2I-built app and confirm the same Node.js REST endpoint responds
+
+. _After demonstrating both Part 1 and Part 2_, clean up the demo project to remove the BuildConfigs, ImageStreams, Deployments, and routes created in this section:
++
+[source,bash,role="copypaste",subs="attributes+"]
+----
+oc delete project {nodejs_demo_ns}
+----
++
+* "One command tears down everything the two scenarios created. The remaining modules use the Parasol application namespaces, not this sandbox."
 
 **What they should notice:**
 
