@@ -25,14 +25,17 @@ OpenShift Build executes container builds inside the cluster, governed by the pl
 
 . Open the **OpenShift web console** at {console_url}[{console_url}^] and log in as `{dev_user}` / `{password}`
 
-. Open the **Web Terminal** by clicking the `>_` icon in the top toolbar (accept the defaults if prompted) and create a new project for the deployment scenarios:
-+
-[source,bash,role="copypaste",subs="attributes+"]
-----
-oc new-project {nodejs_demo_ns}
-----
+. In the left navigation, expand **Home** and click **Projects**, then click **Create Project** in the top right.
 
-. Confirm the `{nodejs_demo_ns}` project is selected (use the **Project** dropdown at the top of the page if needed) and navigate to **Workloads → Topology** in the left navigation. The view should report _No resources found_ — the project is empty.
+. In the **Create Project** dialog, fill in the **Name** field and click **Create**:
++
+* **Name**: `{nodejs_demo_ns}`
++
+image::create-project.png[OpenShift Create Project dialog with Name, Display name, and Description fields,link=self,window=blank,align="center",width=700,title="Create Project from the Projects list"]
++
+NOTE: The project name is suffixed with the developer username (`{dev_user}`) so each demoer gets an isolated sandbox when sharing a cluster.
+
+. The console switches into the new project. In the left navigation, expand **Workloads** and click **Topology**. The view should report _No resources found_ — the project is empty.
 
 . Click the **Quick Create** icon (the **+** in the top toolbar, between the apps grid and the Web Terminal icon) and select **Import from Git** from the dropdown:
 +
