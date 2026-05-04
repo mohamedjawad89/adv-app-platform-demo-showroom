@@ -25,44 +25,44 @@ OpenShift Build executes container builds inside the cluster, governed by the pl
 
 . Open the **OpenShift web console** at {console_url}[{console_url}^] and log in as `{dev_user}` / `{password}`
 
-. Open the **Web Terminal** by clicking the `>_` icon in the top navigation bar (accept the defaults if prompted) and create a new project for the deployment scenarios:
+. Open the **Web Terminal** by clicking the `>_` icon in the top toolbar (accept the defaults if prompted) and create a new project for the deployment scenarios:
 +
 [source,bash,role="copypaste",subs="attributes+"]
 ----
 oc new-project {nodejs_demo_ns}
 ----
+
+. Confirm the `{nodejs_demo_ns}` project is selected (use the **Project** dropdown at the top of the page if needed) and navigate to **Workloads → Topology** in the left navigation. The view should report _No resources found_ — the project is empty.
+
+. Click the **Quick Create** icon (the **+** in the top toolbar, between the apps grid and the Web Terminal icon) and select **Import from Git** from the dropdown:
 +
-* "We'll use this project for both deployment scenarios. Creating it from the CLI is one command — same result as the web-console flow."
+image::import-from-git.png[Quick Create dropdown in the OpenShift masthead showing Import YAML, Import from Git, and Container images options,link=self,window=blank,align="center",width=700,title="Quick Create → Import from Git"]
 
-. Switch to the **Developer** perspective and confirm `{nodejs_demo_ns}` is selected in the project dropdown
-
-. Click **+Add** in the left sidebar and select **Import from Git**
-
-. Enter the repository URL:
+. On the **Import from Git** form, paste the repository URL into the **Git Repo URL** field. Confirm the **Select project** dropdown shows `{nodejs_demo_ns}`:
 +
 [source,text,role="copypaste",subs="attributes+"]
 ----
 {nodejs_app_repo}
 ----
++
+image::import-from-git-2.png[Import from Git form showing the empty Git Repo URL field and the Select project dropdown set to nodejs-demo,link=self,window=blank,align="center",width=700,title="Import from Git form"]
 
-. Under **Import Strategy**, select **Dockerfile**:
-* The console scans the repo and confirms a `Dockerfile` is present
-* "OpenShift inspects the repo, finds the Dockerfile, and proposes a Docker-strategy build."
+. Once the URL validates (green check, "Validated"), the form expands. A green alert reads **Multiple import strategies detected — The Dockerfile at Dockerfile is recommended.** The **Import Strategy** card row appears with **Devfile**, **Dockerfile**, and **Builder Image** options. **Dockerfile** is selected by default and marked with a blue star (the recommendation indicator).
++
+image::import-strategy-docker.png[Import from Git form showing the Multiple import strategies detected alert and Import Strategy card row with Dockerfile selected and starred,link=self,window=blank,align="center",width=700,title="Dockerfile strategy auto-recommended"]
 
-. Set **Application name** to `nodejs-rest-http-docker` and **Name** to `nodejs-rest-http-docker`
+. Leave **Dockerfile** selected and click **Create**.
 
-. Leave the default resource type (`Deployment`) and click **Create**
-
-. Watch the build complete in the **Topology** view:
-* The pod cycles through `Build → Push → Deploy → Running` (the blue donut fills as the build progresses)
-* "OpenShift just cloned the repo, built the image inside the cluster, pushed it to the internal registry, and rolled out a Deployment — all from a single form."
+. The form closes and the **Topology** view shows the new application:
+* The pod cycles through Build → Push → Deploy → Running (the blue donut fills as the build progresses)
+* "OpenShift just cloned the repo, built the image inside the cluster using the repo's Dockerfile, pushed it to the internal registry, and rolled out a Deployment."
 
 . Inspect the platform-managed artifacts:
-.. Navigate to **Builds → BuildConfigs**, open `nodejs-rest-http-docker`, and show the `strategy.dockerStrategy` block in the YAML
+.. Navigate to **Builds → BuildConfigs**, open the new BuildConfig, and show the `strategy.dockerStrategy` block in the YAML
 .. Navigate to **Builds → ImageStreams** and show the new ImageStream tracking the built image
 .. "These are platform-managed resources. The image lives in the in-cluster registry, the BuildConfig is the reusable recipe, and the ImageStream provides a stable reference for downstream consumers."
 
-. Open the route on the Topology view and confirm the Node.js REST endpoint responds
+. Click the route arrow on the Topology view and confirm the Node.js REST endpoint responds
 
 **What to notice:**
 
@@ -97,33 +97,34 @@ S2I separates application code from container build authoring. Red Hat ships har
 
 **Steps:**
 
-. In the **OpenShift web console** Developer perspective, in the `{nodejs_demo_ns}` project, click **+Add** and select **Import from Git** again
+. Still in the `{nodejs_demo_ns}` project, click the **Quick Create** icon (**+** in the top toolbar) again and select **Import from Git**.
 
-. Enter the same repository URL:
+. On the **Import from Git** form, paste the same repository URL into the **Git Repo URL** field:
 +
 [source,text,role="copypaste",subs="attributes+"]
 ----
 {nodejs_app_repo}
 ----
 
-. Under **Import Strategy**, select **Builder Image**:
-* The console auto-detects Node.js as the language and proposes the Red Hat Node.js builder image
-* "OpenShift's S2I strategy recognized this as a Node.js project, picked the Red Hat-maintained Node.js builder image, and configured a Source-strategy BuildConfig — without us editing anything."
+. After validation, the **Import Strategy** card row appears with **Dockerfile** still marked as recommended (blue star). Click the **Builder Image** card to switch strategies:
+* A purple **Import strategy changed to Builder Image** info banner appears at the top of the strategy section.
+* A new **Builder Image** section appears below with a card grid of language builder images (Perl, PHP, Nginx, Httpd, .NET, Go, Ruby, Python, Java, Jboss EAP variants, **Node.js**).
+* OpenShift auto-detects the language and selects the **Node.js** card (outlined in blue, with the blue star marking the recommendation).
++
+image::import-strategy-builder-image.png[Import from Git form with Import Strategy switched to Builder Image and the Node.js builder card auto-selected,link=self,window=blank,align="center",width=700,title="Builder Image strategy with Node.js auto-detected"]
 
-. Set **Application name** to `nodejs-rest-http-s2i` and **Name** to `nodejs-rest-http-s2i`
+. Scroll down and confirm the **Builder Image version** field shows the latest supported Node.js version.
 
-. Confirm the suggested **Builder Image version** (latest supported Node.js)
+. Click **Create**.
 
-. Leave the default resource type (`Deployment`) and click **Create**
-
-. Watch the build complete in the **Topology** view alongside the previous `nodejs-rest-http-docker` deployment
+. Watch the build complete in the **Topology** view alongside the previous Dockerfile-strategy deployment.
 
 . Inspect the resulting BuildConfig:
-.. Navigate to **Builds → BuildConfigs** and open `nodejs-rest-http-s2i`
+.. Navigate to **Builds → BuildConfigs** and open the new S2I BuildConfig
 .. Show `strategy.sourceStrategy` referencing the Node.js builder image — contrast with the `dockerStrategy` from Part 1
 .. "Same source repo, same platform mechanics, different strategy. The Source strategy uses a Red Hat builder image; the Docker strategy uses the repo's own Dockerfile."
 
-. Open the route for the S2I-built app and confirm the same Node.js REST endpoint responds
+. Click the route arrow for the S2I-built app and confirm the same Node.js REST endpoint responds.
 
 . _After demonstrating both Part 1 and Part 2_, clean up the demo project to remove the BuildConfigs, ImageStreams, Deployments, and routes created in this section:
 +
@@ -131,8 +132,6 @@ S2I separates application code from container build authoring. Red Hat ships har
 ----
 oc delete project {nodejs_demo_ns}
 ----
-+
-* "One command tears down everything the two scenarios created. The remaining modules use the Parasol application namespaces, not this sandbox."
 
 **What to notice:**
 
